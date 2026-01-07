@@ -13,16 +13,20 @@ const loginSchema = z.object({
 });
 
 export default function AdminLogin() {
+  const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
+  const { signIn, signUp } = useAuth();
   const navigate = useNavigate();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
+    setSuccess('');
     
     const validation = loginSchema.safeParse({ email, password });
     if (!validation.success) {
@@ -30,20 +34,45 @@ export default function AdminLogin() {
       return;
     }
 
-    setLoading(true);
-    const { error } = await signIn(email, password);
-    setLoading(false);
-
-    if (error) {
-      if (error.message.includes('Invalid login credentials')) {
-        setError('Email ou senha incorretos');
-      } else {
-        setError('Erro ao fazer login. Tente novamente.');
-      }
+    if (isSignUp && password !== confirmPassword) {
+      setError('As senhas não coincidem');
       return;
     }
 
-    navigate('/admin/dashboard');
+    setLoading(true);
+    
+    if (isSignUp) {
+      const { error } = await signUp(email, password);
+      setLoading(false);
+      
+      if (error) {
+        if (error.message.includes('already registered')) {
+          setError('Este email já está cadastrado');
+        } else {
+          setError('Erro ao criar conta. Tente novamente.');
+        }
+        return;
+      }
+      
+      setSuccess('Conta criada! Você já pode fazer login.');
+      setIsSignUp(false);
+      setPassword('');
+      setConfirmPassword('');
+    } else {
+      const { error } = await signIn(email, password);
+      setLoading(false);
+
+      if (error) {
+        if (error.message.includes('Invalid login credentials')) {
+          setError('Email ou senha incorretos');
+        } else {
+          setError('Erro ao fazer login. Tente novamente.');
+        }
+        return;
+      }
+
+      navigate('/admin/dashboard');
+    }
   }
 
   return (
@@ -54,7 +83,9 @@ export default function AdminLogin() {
             <Zap className="w-8 h-8 text-primary-foreground" />
           </div>
           <h1 className="text-2xl font-bold">Compareo Admin</h1>
-          <p className="text-muted-foreground mt-2">Faça login para acessar o painel</p>
+          <p className="text-muted-foreground mt-2">
+            {isSignUp ? 'Crie sua conta para acessar' : 'Faça login para acessar o painel'}
+          </p>
         </div>
         
         <form onSubmit={handleSubmit} className="bg-card rounded-2xl p-6 shadow-lg border border-border">
@@ -62,6 +93,12 @@ export default function AdminLogin() {
             <div className="flex items-center gap-2 p-3 mb-4 rounded-lg bg-destructive/10 text-destructive text-sm">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               {error}
+            </div>
+          )}
+          
+          {success && (
+            <div className="flex items-center gap-2 p-3 mb-4 rounded-lg bg-green-500/10 text-green-600 text-sm">
+              {success}
             </div>
           )}
           
@@ -92,16 +129,45 @@ export default function AdminLogin() {
               />
             </div>
             
+            {isSignUp && (
+              <div>
+                <Label htmlFor="confirmPassword">Confirmar Senha</Label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="mt-1"
+                  required
+                />
+              </div>
+            )}
+            
             <Button type="submit" className="w-full btn-neon" disabled={loading}>
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Entrando...
+                  {isSignUp ? 'Criando...' : 'Entrando...'}
                 </>
               ) : (
-                'Entrar'
+                isSignUp ? 'Criar Conta' : 'Entrar'
               )}
             </Button>
+          </div>
+          
+          <div className="mt-4 text-center">
+            <button
+              type="button"
+              onClick={() => {
+                setIsSignUp(!isSignUp);
+                setError('');
+                setSuccess('');
+              }}
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              {isSignUp ? 'Já tem uma conta? Faça login' : 'Não tem conta? Cadastre-se'}
+            </button>
           </div>
         </form>
         
