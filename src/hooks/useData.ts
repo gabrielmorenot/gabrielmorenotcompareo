@@ -2,6 +2,44 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { Offer, Store, Banner, Category } from '@/types';
 
+// Single Offer
+export function useOffer(id: string) {
+  return useQuery({
+    queryKey: ['offer', id],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('offers')
+        .select('*, stores(*)')
+        .eq('id', id)
+        .eq('active', true)
+        .maybeSingle();
+      if (error) throw error;
+      return data as Offer | null;
+    },
+    enabled: !!id,
+  });
+}
+
+// Related Offers (same category, excluding current)
+export function useRelatedOffers(category?: Category, excludeId?: string) {
+  return useQuery({
+    queryKey: ['related-offers', category, excludeId],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('offers')
+        .select('*, stores(*)')
+        .eq('active', true)
+        .eq('category', category!)
+        .neq('id', excludeId!)
+        .limit(4)
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return data as Offer[];
+    },
+    enabled: !!category && !!excludeId,
+  });
+}
+
 // Offers
 export function useOffers(category?: Category | null) {
   return useQuery({
