@@ -1,0 +1,222 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import type { Offer, Store, Banner, Category } from '@/types';
+
+// Offers
+export function useOffers(category?: Category | null) {
+  return useQuery({
+    queryKey: ['offers', category],
+    queryFn: async () => {
+      let query = supabase
+        .from('offers')
+        .select('*, stores(*)')
+        .eq('active', true)
+        .order('created_at', { ascending: false });
+      
+      if (category) {
+        query = query.eq('category', category);
+      }
+      
+      const { data, error } = await query;
+      if (error) throw error;
+      return data as Offer[];
+    },
+  });
+}
+
+export function useAllOffers() {
+  return useQuery({
+    queryKey: ['all-offers'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('offers')
+        .select('*, stores(*)')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      return data as Offer[];
+    },
+  });
+}
+
+export function useCreateOffer() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (offer: Omit<Offer, 'id' | 'created_at' | 'updated_at' | 'stores'>) => {
+      const { data, error } = await supabase.from('offers').insert(offer).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['offers'] });
+      queryClient.invalidateQueries({ queryKey: ['all-offers'] });
+    },
+  });
+}
+
+export function useUpdateOffer() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...offer }: Partial<Offer> & { id: string }) => {
+      const { stores, ...offerData } = offer as any;
+      const { data, error } = await supabase.from('offers').update(offerData).eq('id', id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['offers'] });
+      queryClient.invalidateQueries({ queryKey: ['all-offers'] });
+    },
+  });
+}
+
+export function useDeleteOffer() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from('offers').delete().eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['offers'] });
+      queryClient.invalidateQueries({ queryKey: ['all-offers'] });
+    },
+  });
+}
+
+// Stores
+export function useStores() {
+  return useQuery({
+    queryKey: ['stores'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('stores').select('*').eq('active', true).order('name');
+      if (error) throw error;
+      return data as Store[];
+    },
+  });
+}
+
+export function useAllStores() {
+  return useQuery({
+    queryKey: ['all-stores'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('stores').select('*').order('name');
+      if (error) throw error;
+      return data as Store[];
+    },
+  });
+}
+
+export function useCreateStore() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (store: Omit<Store, 'id' | 'created_at' | 'updated_at'>) => {
+      const { data, error } = await supabase.from('stores').insert(store).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['stores'] });
+      queryClient.invalidateQueries({ queryKey: ['all-stores'] });
+    },
+  });
+}
+
+export function useUpdateStore() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...store }: Partial<Store> & { id: string }) => {
+      const { data, error } = await supabase.from('stores').update(store).eq('id', id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['stores'] });
+      queryClient.invalidateQueries({ queryKey: ['all-stores'] });
+    },
+  });
+}
+
+export function useDeleteStore() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from('stores').delete().eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['stores'] });
+      queryClient.invalidateQueries({ queryKey: ['all-stores'] });
+    },
+  });
+}
+
+// Banners
+export function useBanners() {
+  return useQuery({
+    queryKey: ['banners'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('banners')
+        .select('*')
+        .eq('active', true)
+        .order('display_order');
+      if (error) throw error;
+      return data as Banner[];
+    },
+  });
+}
+
+export function useAllBanners() {
+  return useQuery({
+    queryKey: ['all-banners'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('banners').select('*').order('display_order');
+      if (error) throw error;
+      return data as Banner[];
+    },
+  });
+}
+
+export function useCreateBanner() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (banner: Omit<Banner, 'id' | 'created_at' | 'updated_at'>) => {
+      const { data, error } = await supabase.from('banners').insert(banner).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['banners'] });
+      queryClient.invalidateQueries({ queryKey: ['all-banners'] });
+    },
+  });
+}
+
+export function useUpdateBanner() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id, ...banner }: Partial<Banner> & { id: string }) => {
+      const { data, error } = await supabase.from('banners').update(banner).eq('id', id).select().single();
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['banners'] });
+      queryClient.invalidateQueries({ queryKey: ['all-banners'] });
+    },
+  });
+}
+
+export function useDeleteBanner() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from('banners').delete().eq('id', id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['banners'] });
+      queryClient.invalidateQueries({ queryKey: ['all-banners'] });
+    },
+  });
+}
