@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAllSettings, useUpdateSetting } from '@/hooks/useSiteSettings';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Save, Palette } from 'lucide-react';
+import { Loader2, Save, Palette, Upload, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 function hslToHex(hsl: string): string {
@@ -54,6 +55,9 @@ export default function AdminAppearance() {
   const { data: settings, isLoading } = useAllSettings();
   const updateSetting = useUpdateSetting();
   const [form, setForm] = useState<Record<string, string>>({});
+  const [uploading, setUploading] = useState<Record<string, boolean>>({});
+  const logoInputRef = useRef<HTMLInputElement>(null);
+  const faviconInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (settings) {
@@ -62,6 +66,29 @@ export default function AdminAppearance() {
       setForm(map);
     }
   }, [settings]);
+
+  async function handleFileUpload(key: string, file: File) {
+    setUploading(prev => ({ ...prev, [key]: true }));
+    try {
+      const ext = file.name.split('.').pop();
+      const fileName = `${key}-${Date.now()}.${ext}`;
+      const { error: uploadError } = await supabase.storage
+        .from('site-assets')
+        .upload(fileName, file, { upsert: true });
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('site-assets')
+        .getPublicUrl(fileName);
+
+      setForm(prev => ({ ...prev, [key]: publicUrl }));
+      toast.success('Imagem enviada!');
+    } catch {
+      toast.error('Erro ao enviar imagem');
+    } finally {
+      setUploading(prev => ({ ...prev, [key]: false }));
+    }
+  }
 
   async function handleSave() {
     try {
@@ -98,16 +125,44 @@ export default function AdminAppearance() {
         {/* Logo & Favicon */}
         <div className="bg-card rounded-xl border border-border p-6">
           <h2 className="text-lg font-semibold mb-4">Logotipo e Ícone</h2>
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Logo upload */}
             <div>
-              <Label>URL do Logotipo</Label>
-              <Input value={form.logo_url || ''} onChange={e => setForm({ ...form, logo_url: e.target.value })} placeholder="https://..." />
-              {form.logo_url && <img src={form.logo_url} alt="Logo preview" className="mt-2 h-12 object-contain" />}
+              <Label>Logotipo</Label>
+              <input ref={logoInputRef} type="file" accept="image/*" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) handleFileUpload('logo_url', f); }} />
+              <div className="mt-2 border-2 border-dashed border-border rounded-xl p-4 text-center">
+                {form.logo_url ? (
+                  <div className="relative inline-block">
+                    <img src={form.logo_url} alt="Logo" className="h-16 object-contain mx-auto" />
+                    <button onClick={() => setForm({ ...form, logo_url: '' })} className="absolute -top-2 -right-2 w-6 h-6 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ) : null}
+                <Button variant="outline" size="sm" className="mt-2" onClick={() => logoInputRef.current?.click()} disabled={uploading.logo_url}>
+                  {uploading.logo_url ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
+                  {form.logo_url ? 'Trocar' : 'Enviar logo'}
+                </Button>
+              </div>
             </div>
+            {/* Favicon upload */}
             <div>
-              <Label>URL do Favicon</Label>
-              <Input value={form.favicon_url || ''} onChange={e => setForm({ ...form, favicon_url: e.target.value })} placeholder="https://..." />
-              {form.favicon_url && <img src={form.favicon_url} alt="Favicon preview" className="mt-2 h-8 object-contain" />}
+              <Label>Favicon / Ícone</Label>
+              <input ref={faviconInputRef} type="file" accept="image/*" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) handleFileUpload('favicon_url', f); }} />
+              <div className="mt-2 border-2 border-dashed border-border rounded-xl p-4 text-center">
+                {form.favicon_url ? (
+                  <div className="relative inline-block">
+                    <img src={form.favicon_url} alt="Favicon" className="h-10 object-contain mx-auto" />
+                    <button onClick={() => setForm({ ...form, favicon_url: '' })} className="absolute -top-2 -right-2 w-6 h-6 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                ) : null}
+                <Button variant="outline" size="sm" className="mt-2" onClick={() => faviconInputRef.current?.click()} disabled={uploading.favicon_url}>
+                  {uploading.favicon_url ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
+                  {form.favicon_url ? 'Trocar' : 'Enviar favicon'}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
