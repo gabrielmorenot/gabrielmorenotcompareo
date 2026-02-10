@@ -16,6 +16,8 @@ import AdminStores from "./pages/AdminStores";
 import AdminCategories from "./pages/AdminCategories";
 import AdminAppearance from "./pages/AdminAppearance";
 import AdminMenu from "./pages/AdminMenu";
+import AdminPopups from "./pages/AdminPopups";
+import { PopupDisplay } from "./components/PopupDisplay";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +30,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <PopupDisplay />
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/produto/:id" element={<ProductPage />} />
@@ -40,6 +43,7 @@ const App = () => (
                 <Route path="categories" element={<AdminCategories />} />
                 <Route path="appearance" element={<AdminAppearance />} />
                 <Route path="menu" element={<AdminMenu />} />
+                <Route path="popups" element={<AdminPopups />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -39,6 +39,29 @@ export interface Banner {
   updated_at: string;
 }
 
+export type PopupType = 'informativo' | 'promocao' | 'captura_lead';
+export type PopupDisplayTarget = 'home' | 'all' | 'specific';
+export type PopupDeviceTarget = 'desktop' | 'mobile' | 'both';
+
+export interface Popup {
+  id: string;
+  title: string;
+  description: string | null;
+  image_url: string | null;
+  cta_text: string | null;
+  cta_link: string | null;
+  popup_type: PopupType;
+  display_target: PopupDisplayTarget;
+  specific_pages: string[] | null;
+  device_target: PopupDeviceTarget;
+  delay_seconds: number;
+  once_per_session: boolean;
+  active: boolean;
+  display_order: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export const CATEGORIES: { value: Category; label: string; icon: string }[] = [
   { value: 'tv', label: 'TV', icon: '📺' },
   { value: 'celular', label: 'Celular', icon: '📱' },

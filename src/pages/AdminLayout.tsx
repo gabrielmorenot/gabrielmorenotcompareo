@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { Zap, Package, Image, Store, LogOut, Loader2, LayoutDashboard, Palette, FolderTree, MenuIcon } from 'lucide-react';
+import { Zap, Package, Image, Store, LogOut, Loader2, LayoutDashboard, Palette, FolderTree, MenuIcon, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
@@ -12,6 +12,7 @@ const navItems = [
   { to: '/admin/categories', label: 'Categorias', icon: FolderTree },
   { to: '/admin/appearance', label: 'Aparência', icon: Palette },
   { to: '/admin/menu', label: 'Menu', icon: MenuIcon },
+  { to: '/admin/popups', label: 'Popups', icon: MessageSquare },
 ];
 
 export default function AdminLayout() {
