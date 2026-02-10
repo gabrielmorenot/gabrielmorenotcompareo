@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useAllPopups, useCreatePopup, useUpdatePopup, useDeletePopup } from '@/hooks/usePopups';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -7,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Plus, Pencil, Trash2, Loader2, MessageSquare } from 'lucide-react';
+import { Plus, Pencil, Trash2, Loader2, MessageSquare, Upload, X } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Popup, PopupType, PopupDisplayTarget, PopupDeviceTarget } from '@/types';
 
@@ -53,6 +54,30 @@ export default function AdminPopups() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState(emptyForm);
+  const [uploading, setUploading] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Imagem deve ter no máximo 2MB');
+      return;
+    }
+    setUploading(true);
+    try {
+      const ext = file.name.split('.').pop();
+      const path = `popups/${Date.now()}.${ext}`;
+      const { error: uploadError } = await supabase.storage.from('site-assets').upload(path, file);
+      if (uploadError) throw uploadError;
+      const { data: { publicUrl } } = supabase.storage.from('site-assets').getPublicUrl(path);
+      setForm(prev => ({ ...prev, image_url: publicUrl }));
+      toast.success('Imagem enviada');
+    } catch (err: any) {
+      toast.error(err.message || 'Erro ao enviar imagem');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const openCreate = () => {
     setEditingId(null);
@@ -204,8 +229,38 @@ export default function AdminPopups() {
               <Textarea value={form.description} onChange={e => setForm({...form, description: e.target.value})} rows={3} />
             </div>
             <div>
-              <Label>URL da Imagem</Label>
-              <Input value={form.image_url} onChange={e => setForm({...form, image_url: e.target.value})} placeholder="https://..." />
+              <Label>Imagem do Popup</Label>
+              <p className="text-xs text-muted-foreground mb-2">Recomendado: 600×400px, formato JPG ou PNG, máx. 2MB</p>
+              {form.image_url ? (
+                <div className="relative w-full h-32 rounded-lg overflow-hidden border bg-muted">
+                  <img src={form.image_url} alt="Preview" className="w-full h-full object-cover" />
+                  <button
+                    type="button"
+                    onClick={() => setForm({...form, image_url: ''})}
+                    className="absolute top-2 right-2 p-1 rounded-full bg-background/80 hover:bg-background"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/50 transition-colors">
+                  {uploading ? (
+                    <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+                  ) : (
+                    <>
+                      <Upload className="w-6 h-6 text-muted-foreground mb-1" />
+                      <span className="text-sm text-muted-foreground">Clique para enviar</span>
+                    </>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="hidden"
+                    onChange={handleImageUpload}
+                    disabled={uploading}
+                  />
+                </label>
+              )}
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
