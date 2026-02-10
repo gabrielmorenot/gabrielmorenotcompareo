@@ -4,6 +4,7 @@ import { Footer } from '@/components/Footer';
 import { HeroSection } from '@/components/HeroSection';
 import { CategoryFilter } from '@/components/CategoryFilter';
 import { BannerSection } from '@/components/BannerSection';
+import { HeroPromoSection } from '@/components/HeroPromoSection';
 import { OfferCard } from '@/components/OfferCard';
 import { useOffers, useBanners } from '@/hooks/useData';
 import { useCategories } from '@/hooks/useCategories';
@@ -25,6 +26,8 @@ const Index = () => {
       
       <main className="flex-grow">
         <HeroSection />
+        
+        <HeroPromoSection />
         
         <CategoryFilter selected={selectedCategory} onSelect={setSelectedCategory} />
         
