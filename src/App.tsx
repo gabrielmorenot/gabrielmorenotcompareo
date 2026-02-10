@@ -17,6 +17,7 @@ import AdminCategories from "./pages/AdminCategories";
 import AdminAppearance from "./pages/AdminAppearance";
 import AdminMenu from "./pages/AdminMenu";
 import AdminPopups from "./pages/AdminPopups";
+import AdminHeroPromos from "./pages/AdminHeroPromos";
 import { PopupDisplay } from "./components/PopupDisplay";
 import NotFound from "./pages/NotFound";
 
@@ -44,6 +45,7 @@ const App = () => (
                 <Route path="appearance" element={<AdminAppearance />} />
                 <Route path="menu" element={<AdminMenu />} />
                 <Route path="popups" element={<AdminPopups />} />
+                <Route path="hero-promos" element={<AdminHeroPromos />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
