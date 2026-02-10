@@ -188,6 +188,63 @@ export type Database = {
           },
         ]
       }
+      popups: {
+        Row: {
+          active: boolean
+          created_at: string
+          cta_link: string | null
+          cta_text: string | null
+          delay_seconds: number
+          description: string | null
+          device_target: Database["public"]["Enums"]["popup_device_target"]
+          display_order: number | null
+          display_target: Database["public"]["Enums"]["popup_display_target"]
+          id: string
+          image_url: string | null
+          once_per_session: boolean
+          popup_type: Database["public"]["Enums"]["popup_type"]
+          specific_pages: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          cta_link?: string | null
+          cta_text?: string | null
+          delay_seconds?: number
+          description?: string | null
+          device_target?: Database["public"]["Enums"]["popup_device_target"]
+          display_order?: number | null
+          display_target?: Database["public"]["Enums"]["popup_display_target"]
+          id?: string
+          image_url?: string | null
+          once_per_session?: boolean
+          popup_type?: Database["public"]["Enums"]["popup_type"]
+          specific_pages?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          cta_link?: string | null
+          cta_text?: string | null
+          delay_seconds?: number
+          description?: string | null
+          device_target?: Database["public"]["Enums"]["popup_device_target"]
+          display_order?: number | null
+          display_target?: Database["public"]["Enums"]["popup_display_target"]
+          id?: string
+          image_url?: string | null
+          once_per_session?: boolean
+          popup_type?: Database["public"]["Enums"]["popup_type"]
+          specific_pages?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           created_at: string
@@ -278,6 +335,9 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      popup_device_target: "desktop" | "mobile" | "both"
+      popup_display_target: "home" | "all" | "specific"
+      popup_type: "informativo" | "promocao" | "captura_lead"
       product_category:
         | "tv"
         | "celular"
@@ -414,6 +474,9 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      popup_device_target: ["desktop", "mobile", "both"],
+      popup_display_target: ["home", "all", "specific"],
+      popup_type: ["informativo", "promocao", "captura_lead"],
       product_category: [
         "tv",
         "celular",
