@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Slider } from '@/components/ui/slider';
 import { Loader2, Save, Palette, Upload, X } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -164,6 +165,35 @@ export default function AdminAppearance() {
                   {uploading.favicon_url ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
                   {form.favicon_url ? 'Trocar' : 'Enviar favicon'}
                 </Button>
+              </div>
+            </div>
+          </div>
+
+          {/* Logo Sizes */}
+          <div className="mt-6">
+            <h3 className="text-sm font-semibold mb-4">Tamanho do Logotipo</h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div>
+                <Label>Menu / Header ({form.header_logo_size || '100'}%)</Label>
+                <Slider
+                  value={[Number(form.header_logo_size) || 100]}
+                  onValueChange={([v]) => setForm({ ...form, header_logo_size: String(v) })}
+                  min={30}
+                  max={200}
+                  step={5}
+                  className="mt-2"
+                />
+              </div>
+              <div>
+                <Label>Footer ({form.footer_logo_size || '100'}%)</Label>
+                <Slider
+                  value={[Number(form.footer_logo_size) || 100]}
+                  onValueChange={([v]) => setForm({ ...form, footer_logo_size: String(v) })}
+                  min={30}
+                  max={200}
+                  step={5}
+                  className="mt-2"
+                />
               </div>
             </div>
           </div>

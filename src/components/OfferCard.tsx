@@ -22,13 +22,13 @@ export function OfferCard({ offer }: OfferCardProps) {
         className="card-offer relative flex flex-col h-full cursor-pointer"
       >
         {offer.discount && offer.discount > 0 && (
-          <span className="badge-discount">
+          <span className="badge-discount z-10">
             <Tag className="w-3 h-3 inline mr-1" />
             -{offer.discount}%
           </span>
         )}
         
-        <div className="aspect-square bg-secondary/50 relative overflow-hidden">
+        <div className="aspect-square bg-white relative overflow-hidden">
           {offer.image_url ? (
             <img
               src={offer.image_url}

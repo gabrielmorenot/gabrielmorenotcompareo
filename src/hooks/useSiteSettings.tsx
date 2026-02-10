@@ -21,6 +21,8 @@ interface SiteSettings {
   hero_button_primary_link: string;
   hero_button_secondary_text: string;
   hero_button_secondary_link: string;
+  header_logo_size: string;
+  footer_logo_size: string;
 }
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -42,6 +44,8 @@ const DEFAULT_SETTINGS: SiteSettings = {
   hero_button_primary_link: '#ofertas',
   hero_button_secondary_text: 'Explorar Categorias',
   hero_button_secondary_link: '#categorias',
+  header_logo_size: '100',
+  footer_logo_size: '100',
 };
 
 const SiteSettingsContext = createContext<{
@@ -84,6 +88,8 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
       hero_button_primary_link: map.hero_button_primary_link ?? DEFAULT_SETTINGS.hero_button_primary_link,
       hero_button_secondary_text: map.hero_button_secondary_text ?? DEFAULT_SETTINGS.hero_button_secondary_text,
       hero_button_secondary_link: map.hero_button_secondary_link ?? DEFAULT_SETTINGS.hero_button_secondary_link,
+      header_logo_size: map.header_logo_size ?? DEFAULT_SETTINGS.header_logo_size,
+      footer_logo_size: map.footer_logo_size ?? DEFAULT_SETTINGS.footer_logo_size,
     };
   }, [rawSettings]);
 

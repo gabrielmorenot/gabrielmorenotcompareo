@@ -15,7 +15,7 @@ export function Header() {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             {settings.logo_url ? (
-              <img src={settings.logo_url} alt="Logo" className="h-10 w-auto" />
+              <img src={settings.logo_url} alt="Logo" style={{ height: `${(Number(settings.header_logo_size) || 100) * 0.4}px` }} className="w-auto" />
             ) : (
               <span className="text-2xl font-extrabold text-foreground">Logo</span>
             )}
