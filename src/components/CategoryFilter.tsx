@@ -1,12 +1,14 @@
 import { motion } from 'framer-motion';
-import { CATEGORIES, type Category } from '@/types';
+import { useCategories, type DynamicCategory } from '@/hooks/useCategories';
 
 interface CategoryFilterProps {
-  selected: Category | null;
-  onSelect: (category: Category | null) => void;
+  selected: string | null;
+  onSelect: (categoryId: string | null) => void;
 }
 
 export function CategoryFilter({ selected, onSelect }: CategoryFilterProps) {
+  const { data: categories } = useCategories();
+
   return (
     <section id="categorias" className="py-8 bg-card/50">
       <div className="container">
@@ -22,16 +24,16 @@ export function CategoryFilter({ selected, onSelect }: CategoryFilterProps) {
             🏷️ Ver todas
           </motion.button>
           
-          {CATEGORIES.map((cat) => (
+          {categories?.map((cat) => (
             <motion.button
-              key={cat.value}
+              key={cat.id}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => onSelect(cat.value)}
-              className={`category-chip ${selected === cat.value ? 'active' : ''}`}
+              onClick={() => onSelect(cat.id)}
+              className={`category-chip ${selected === cat.id ? 'active' : ''}`}
             >
               <span>{cat.icon}</span>
-              <span>{cat.label}</span>
+              <span>{cat.name}</span>
             </motion.button>
           ))}
         </div>

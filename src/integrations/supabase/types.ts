@@ -23,6 +23,7 @@ export type Database = {
           display_order: number | null
           id: string
           image_url: string | null
+          mobile_image_url: string | null
           subtitle: string | null
           title: string
           updated_at: string
@@ -35,6 +36,7 @@ export type Database = {
           display_order?: number | null
           id?: string
           image_url?: string | null
+          mobile_image_url?: string | null
           subtitle?: string | null
           title: string
           updated_at?: string
@@ -47,9 +49,79 @@ export type Database = {
           display_order?: number | null
           id?: string
           image_url?: string | null
+          mobile_image_url?: string | null
           subtitle?: string | null
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      categories: {
+        Row: {
+          active: boolean
+          created_at: string
+          display_order: number | null
+          icon: string | null
+          id: string
+          image_url: string | null
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          display_order?: number | null
+          icon?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      menu_items: {
+        Row: {
+          active: boolean
+          created_at: string
+          display_order: number | null
+          id: string
+          is_external: boolean
+          label: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_external?: boolean
+          label: string
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_external?: boolean
+          label?: string
+          updated_at?: string
+          url?: string
         }
         Relationships: []
       }
@@ -58,6 +130,7 @@ export type Database = {
           active: boolean
           affiliate_link: string
           category: Database["public"]["Enums"]["product_category"]
+          category_id: string | null
           created_at: string
           discount: number | null
           id: string
@@ -72,6 +145,7 @@ export type Database = {
           active?: boolean
           affiliate_link: string
           category: Database["public"]["Enums"]["product_category"]
+          category_id?: string | null
           created_at?: string
           discount?: number | null
           id?: string
@@ -86,6 +160,7 @@ export type Database = {
           active?: boolean
           affiliate_link?: string
           category?: Database["public"]["Enums"]["product_category"]
+          category_id?: string | null
           created_at?: string
           discount?: number | null
           id?: string
@@ -98,6 +173,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "offers_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "offers_store_id_fkey"
             columns: ["store_id"]
             isOneToOne: false
@@ -105,6 +187,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      site_settings: {
+        Row: {
+          created_at: string
+          id: string
+          key: string
+          updated_at: string
+          value: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key: string
+          updated_at?: string
+          value?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key?: string
+          updated_at?: string
+          value?: string | null
+        }
+        Relationships: []
       }
       stores: {
         Row: {

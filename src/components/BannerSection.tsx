@@ -41,13 +41,21 @@ export function BannerSection({ banners }: BannerSectionProps) {
                 )}
               </div>
               
+              {/* Desktop image */}
               {banner.image_url && (
-                <div className="absolute bottom-0 right-0 w-32 h-32 opacity-30">
-                  <img
-                    src={banner.image_url}
-                    alt=""
-                    className="w-full h-full object-contain"
-                  />
+                <div className="absolute bottom-0 right-0 w-32 h-32 opacity-30 hidden md:block">
+                  <img src={banner.image_url} alt="" className="w-full h-full object-contain" />
+                </div>
+              )}
+              {/* Mobile image */}
+              {(banner as any).mobile_image_url && (
+                <div className="absolute bottom-0 right-0 w-24 h-24 opacity-30 md:hidden">
+                  <img src={(banner as any).mobile_image_url} alt="" className="w-full h-full object-contain" />
+                </div>
+              )}
+              {!((banner as any).mobile_image_url) && banner.image_url && (
+                <div className="absolute bottom-0 right-0 w-24 h-24 opacity-30 md:hidden">
+                  <img src={banner.image_url} alt="" className="w-full h-full object-contain" />
                 </div>
               )}
             </motion.div>

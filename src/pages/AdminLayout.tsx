@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { Zap, Package, Image, Store, LogOut, Loader2, LayoutDashboard } from 'lucide-react';
+import { Zap, Package, Image, Store, LogOut, Loader2, LayoutDashboard, Palette, FolderTree, MenuIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
@@ -9,6 +9,9 @@ const navItems = [
   { to: '/admin/offers', label: 'Ofertas', icon: Package },
   { to: '/admin/banners', label: 'Banners', icon: Image },
   { to: '/admin/stores', label: 'Lojas', icon: Store },
+  { to: '/admin/categories', label: 'Categorias', icon: FolderTree },
+  { to: '/admin/appearance', label: 'Aparência', icon: Palette },
+  { to: '/admin/menu', label: 'Menu', icon: MenuIcon },
 ];
 
 export default function AdminLayout() {
@@ -17,16 +20,11 @@ export default function AdminLayout() {
   const location = useLocation();
 
   useEffect(() => {
-    if (!loading && !user) {
-      navigate('/admin');
-    }
+    if (!loading && !user) navigate('/admin');
   }, [user, loading, navigate]);
 
   useEffect(() => {
-    if (!loading && user && !isAdmin) {
-      // User is logged in but not admin
-      navigate('/admin');
-    }
+    if (!loading && user && !isAdmin) navigate('/admin');
   }, [isAdmin, loading, user, navigate]);
 
   if (loading) {
@@ -37,13 +35,10 @@ export default function AdminLayout() {
     );
   }
 
-  if (!user || !isAdmin) {
-    return null;
-  }
+  if (!user || !isAdmin) return null;
 
   return (
     <div className="min-h-screen flex bg-background">
-      {/* Sidebar */}
       <aside className="w-64 admin-sidebar flex flex-col">
         <div className="p-4 border-b border-border">
           <Link to="/" className="flex items-center gap-2">
@@ -76,19 +71,13 @@ export default function AdminLayout() {
         
         <div className="p-4 border-t border-border">
           <p className="text-xs text-muted-foreground mb-2 truncate">{user.email}</p>
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full"
-            onClick={() => signOut().then(() => navigate('/admin'))}
-          >
+          <Button variant="outline" size="sm" className="w-full" onClick={() => signOut().then(() => navigate('/admin'))}>
             <LogOut className="w-4 h-4 mr-2" />
             Sair
           </Button>
         </div>
       </aside>
       
-      {/* Main content */}
       <main className="flex-1 overflow-auto">
         <Outlet />
       </main>
