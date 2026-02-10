@@ -231,6 +231,46 @@ export default function AdminAppearance() {
           </div>
         </div>
 
+        {/* Hero Texts */}
+        <div className="bg-card rounded-xl border border-border p-6">
+          <h2 className="text-lg font-semibold mb-4">Textos do Hero</h2>
+          <p className="text-sm text-muted-foreground mb-4">Use **texto** para destacar palavras no título (ficará com gradiente).</p>
+          <div className="space-y-4">
+            <div>
+              <Label>Badge (texto pequeno acima do título)</Label>
+              <Input value={form.hero_badge_text || ''} onChange={e => setForm({ ...form, hero_badge_text: e.target.value })} placeholder="As melhores ofertas em um só lugar" />
+            </div>
+            <div>
+              <Label>Título Principal</Label>
+              <Input value={form.hero_title || ''} onChange={e => setForm({ ...form, hero_title: e.target.value })} placeholder="Compare preços e **economize** nas suas compras" />
+            </div>
+            <div>
+              <Label>Subtítulo</Label>
+              <textarea value={form.hero_subtitle || ''} onChange={e => setForm({ ...form, hero_subtitle: e.target.value })} placeholder="Encontre os melhores descontos..." className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm" />
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <Label>Texto Botão Primário</Label>
+                <Input value={form.hero_button_primary_text || ''} onChange={e => setForm({ ...form, hero_button_primary_text: e.target.value })} placeholder="Ver Ofertas do Dia" />
+              </div>
+              <div>
+                <Label>Link Botão Primário</Label>
+                <Input value={form.hero_button_primary_link || ''} onChange={e => setForm({ ...form, hero_button_primary_link: e.target.value })} placeholder="#ofertas" />
+              </div>
+            </div>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <Label>Texto Botão Secundário</Label>
+                <Input value={form.hero_button_secondary_text || ''} onChange={e => setForm({ ...form, hero_button_secondary_text: e.target.value })} placeholder="Explorar Categorias" />
+              </div>
+              <div>
+                <Label>Link Botão Secundário</Label>
+                <Input value={form.hero_button_secondary_link || ''} onChange={e => setForm({ ...form, hero_button_secondary_link: e.target.value })} placeholder="#categorias" />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Preview */}
         <div className="bg-card rounded-xl border border-border p-6">
           <h2 className="text-lg font-semibold mb-4">Preview</h2>
