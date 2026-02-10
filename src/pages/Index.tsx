@@ -6,13 +6,18 @@ import { CategoryFilter } from '@/components/CategoryFilter';
 import { BannerSection } from '@/components/BannerSection';
 import { OfferCard } from '@/components/OfferCard';
 import { useOffers, useBanners } from '@/hooks/useData';
-import type { Category } from '@/types';
+import { useCategories } from '@/hooks/useCategories';
 import { Loader2 } from 'lucide-react';
 
 const Index = () => {
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const { data: offers, isLoading: loadingOffers } = useOffers(selectedCategory);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const { data: offers, isLoading: loadingOffers } = useOffers(selectedCategory as any);
   const { data: banners } = useBanners();
+  const { data: categories } = useCategories();
+
+  const selectedCategoryName = selectedCategory
+    ? categories?.find(c => c.id === selectedCategory)?.name
+    : null;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -27,7 +32,7 @@ const Index = () => {
         <section id="ofertas" className="py-12 bg-background">
           <div className="container">
             <h2 className="section-title">
-              {selectedCategory ? `Ofertas em ${selectedCategory}` : 'Ofertas do Dia'}
+              {selectedCategoryName ? `Ofertas em ${selectedCategoryName}` : 'Ofertas do Dia'}
             </h2>
             
             {loadingOffers ? (

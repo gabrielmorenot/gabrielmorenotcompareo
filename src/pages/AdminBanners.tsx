@@ -16,21 +16,21 @@ export default function AdminBanners() {
   const deleteBanner = useDeleteBanner();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Banner | null>(null);
-  const [form, setForm] = useState({ title: '', subtitle: '', image_url: '', button_text: 'Ver ofertas', button_link: '', display_order: 0, active: true });
+  const [form, setForm] = useState({ title: '', subtitle: '', image_url: '', mobile_image_url: '', button_text: 'Ver ofertas', button_link: '', display_order: 0, active: true });
 
-  function resetForm() { setForm({ title: '', subtitle: '', image_url: '', button_text: 'Ver ofertas', button_link: '', display_order: 0, active: true }); setEditing(null); }
+  function resetForm() { setForm({ title: '', subtitle: '', image_url: '', mobile_image_url: '', button_text: 'Ver ofertas', button_link: '', display_order: 0, active: true }); setEditing(null); }
 
   function handleEdit(banner: Banner) {
     setEditing(banner);
-    setForm({ title: banner.title, subtitle: banner.subtitle || '', image_url: banner.image_url || '', button_text: banner.button_text || 'Ver ofertas', button_link: banner.button_link || '', display_order: banner.display_order, active: banner.active });
+    setForm({ title: banner.title, subtitle: banner.subtitle || '', image_url: banner.image_url || '', mobile_image_url: (banner as any).mobile_image_url || '', button_text: banner.button_text || 'Ver ofertas', button_link: banner.button_link || '', display_order: banner.display_order, active: banner.active });
     setOpen(true);
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
-      if (editing) { await updateBanner.mutateAsync({ id: editing.id, ...form }); toast.success('Banner atualizado!'); }
-      else { await createBanner.mutateAsync(form); toast.success('Banner criado!'); }
+      if (editing) { await updateBanner.mutateAsync({ id: editing.id, ...form } as any); toast.success('Banner atualizado!'); }
+      else { await createBanner.mutateAsync(form as any); toast.success('Banner criado!'); }
       setOpen(false); resetForm();
     } catch { toast.error('Erro ao salvar'); }
   }
@@ -51,7 +51,8 @@ export default function AdminBanners() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div><Label>Título</Label><Input value={form.title} onChange={e => setForm({...form, title: e.target.value})} required /></div>
               <div><Label>Subtítulo</Label><Input value={form.subtitle} onChange={e => setForm({...form, subtitle: e.target.value})} /></div>
-              <div><Label>URL da Imagem</Label><Input value={form.image_url} onChange={e => setForm({...form, image_url: e.target.value})} /></div>
+              <div><Label>Imagem Desktop (URL)</Label><Input value={form.image_url} onChange={e => setForm({...form, image_url: e.target.value})} /></div>
+              <div><Label>Imagem Mobile (URL)</Label><Input value={form.mobile_image_url} onChange={e => setForm({...form, mobile_image_url: e.target.value})} /></div>
               <div className="grid grid-cols-2 gap-4">
                 <div><Label>Texto do Botão</Label><Input value={form.button_text} onChange={e => setForm({...form, button_text: e.target.value})} /></div>
                 <div><Label>Link do Botão</Label><Input value={form.button_link} onChange={e => setForm({...form, button_link: e.target.value})} /></div>

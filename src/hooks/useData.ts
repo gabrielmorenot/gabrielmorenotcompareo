@@ -40,10 +40,10 @@ export function useRelatedOffers(category?: Category, excludeId?: string) {
   });
 }
 
-// Offers
-export function useOffers(category?: Category | null) {
+// Offers - supports filtering by category enum or category_id uuid
+export function useOffers(categoryFilter?: string | null) {
   return useQuery({
-    queryKey: ['offers', category],
+    queryKey: ['offers', categoryFilter],
     queryFn: async () => {
       let query = supabase
         .from('offers')
@@ -51,8 +51,14 @@ export function useOffers(category?: Category | null) {
         .eq('active', true)
         .order('created_at', { ascending: false });
       
-      if (category) {
-        query = query.eq('category', category);
+      if (categoryFilter) {
+        // Check if it's a UUID (category_id) or enum value
+        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(categoryFilter);
+        if (isUuid) {
+          query = query.eq('category_id', categoryFilter);
+        } else {
+          query = query.eq('category', categoryFilter as Category);
+        }
       }
       
       const { data, error } = await query;
