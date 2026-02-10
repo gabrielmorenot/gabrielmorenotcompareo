@@ -14,6 +14,13 @@ interface SiteSettings {
   body_font: string;
   cover_color: string;
   cover_image_url: string | null;
+  hero_title: string;
+  hero_subtitle: string;
+  hero_badge_text: string;
+  hero_button_primary_text: string;
+  hero_button_primary_link: string;
+  hero_button_secondary_text: string;
+  hero_button_secondary_link: string;
 }
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -28,6 +35,13 @@ const DEFAULT_SETTINGS: SiteSettings = {
   body_font: 'Plus Jakarta Sans',
   cover_color: '67 100% 50%',
   cover_image_url: null,
+  hero_title: 'Compare preços e **economize** nas suas compras',
+  hero_subtitle: 'Encontre os melhores descontos em TVs, celulares, eletrodomésticos e muito mais. Atualizamos as ofertas todos os dias para você!',
+  hero_badge_text: 'As melhores ofertas em um só lugar',
+  hero_button_primary_text: 'Ver Ofertas do Dia',
+  hero_button_primary_link: '#ofertas',
+  hero_button_secondary_text: 'Explorar Categorias',
+  hero_button_secondary_link: '#categorias',
 };
 
 const SiteSettingsContext = createContext<{
@@ -63,6 +77,13 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
       body_font: map.body_font ?? DEFAULT_SETTINGS.body_font,
       cover_color: map.cover_color ?? DEFAULT_SETTINGS.cover_color,
       cover_image_url: map.cover_image_url ?? DEFAULT_SETTINGS.cover_image_url,
+      hero_title: map.hero_title ?? DEFAULT_SETTINGS.hero_title,
+      hero_subtitle: map.hero_subtitle ?? DEFAULT_SETTINGS.hero_subtitle,
+      hero_badge_text: map.hero_badge_text ?? DEFAULT_SETTINGS.hero_badge_text,
+      hero_button_primary_text: map.hero_button_primary_text ?? DEFAULT_SETTINGS.hero_button_primary_text,
+      hero_button_primary_link: map.hero_button_primary_link ?? DEFAULT_SETTINGS.hero_button_primary_link,
+      hero_button_secondary_text: map.hero_button_secondary_text ?? DEFAULT_SETTINGS.hero_button_secondary_text,
+      hero_button_secondary_link: map.hero_button_secondary_link ?? DEFAULT_SETTINGS.hero_button_secondary_link,
     };
   }, [rawSettings]);
 

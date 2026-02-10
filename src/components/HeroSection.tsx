@@ -39,24 +39,25 @@ export function HeroSection() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/20 text-sm font-medium mb-6">
             <Zap className="w-4 h-4 text-primary" />
-            As melhores ofertas em um só lugar
+            {settings.hero_badge_text}
           </div>
           
           <h1 className="text-4xl md:text-6xl font-extrabold mb-6 leading-tight">
-            Compare preços e <span className="text-gradient">economize</span> nas suas compras
+            {settings.hero_title.split('**').map((part, i) =>
+              i % 2 === 1 ? <span key={i} className="text-gradient">{part}</span> : part
+            )}
           </h1>
           
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Encontre os melhores descontos em TVs, celulares, eletrodomésticos e muito mais. 
-            Atualizamos as ofertas todos os dias para você!
+            {settings.hero_subtitle}
           </p>
           
           <div className="flex flex-wrap justify-center gap-4 mb-12">
-            <a href="#ofertas" className="btn-neon">
-              Ver Ofertas do Dia
+            <a href={settings.hero_button_primary_link} className="btn-neon">
+              {settings.hero_button_primary_text}
             </a>
-            <a href="#categorias" className="px-6 py-3 rounded-lg border border-border font-semibold hover:bg-secondary transition-colors">
-              Explorar Categorias
+            <a href={settings.hero_button_secondary_link} className="px-6 py-3 rounded-lg border border-border font-semibold hover:bg-secondary transition-colors">
+              {settings.hero_button_secondary_text}
             </a>
           </div>
           
