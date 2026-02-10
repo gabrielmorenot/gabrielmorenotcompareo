@@ -12,6 +12,8 @@ interface SiteSettings {
   button_color: string;
   heading_font: string;
   body_font: string;
+  cover_color: string;
+  cover_image_url: string | null;
 }
 
 const DEFAULT_SETTINGS: SiteSettings = {
@@ -24,6 +26,8 @@ const DEFAULT_SETTINGS: SiteSettings = {
   button_color: '67 100% 50%',
   heading_font: 'Plus Jakarta Sans',
   body_font: 'Plus Jakarta Sans',
+  cover_color: '67 100% 50%',
+  cover_image_url: null,
 };
 
 const SiteSettingsContext = createContext<{
@@ -57,6 +61,8 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
       button_color: map.button_color ?? DEFAULT_SETTINGS.button_color,
       heading_font: map.heading_font ?? DEFAULT_SETTINGS.heading_font,
       body_font: map.body_font ?? DEFAULT_SETTINGS.body_font,
+      cover_color: map.cover_color ?? DEFAULT_SETTINGS.cover_color,
+      cover_image_url: map.cover_image_url ?? DEFAULT_SETTINGS.cover_image_url,
     };
   }, [rawSettings]);
 
@@ -73,11 +79,10 @@ export function SiteSettingsProvider({ children }: { children: ReactNode }) {
     root.style.setProperty('--foreground', settings.text_color);
     root.style.setProperty('--card-foreground', settings.text_color);
 
-    // Fonts
-    document.body.style.fontFamily = `"${settings.body_font}", system-ui, sans-serif`;
-    document.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(el => {
-      (el as HTMLElement).style.fontFamily = `"${settings.heading_font}", system-ui, sans-serif`;
-    });
+    // Fonts via CSS variables for global coverage
+    root.style.setProperty('--font-body', `"${settings.body_font}", system-ui, sans-serif`);
+    root.style.setProperty('--font-heading', `"${settings.heading_font}", system-ui, sans-serif`);
+    document.body.style.fontFamily = `var(--font-body)`;
 
     // Favicon
     if (settings.favicon_url) {
