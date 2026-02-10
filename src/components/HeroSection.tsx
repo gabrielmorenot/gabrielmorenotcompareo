@@ -1,14 +1,34 @@
 import { motion } from 'framer-motion';
-import { Zap, TrendingDown, ShieldCheck } from 'lucide-react';
+import { TrendingDown, ShieldCheck, Zap } from 'lucide-react';
+import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 export function HeroSection() {
+  const { settings } = useSiteSettings();
+
+  const coverStyle: React.CSSProperties = settings.cover_image_url
+    ? {
+        backgroundImage: `url(${settings.cover_image_url})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }
+    : {
+        background: `linear-gradient(135deg, hsl(${settings.cover_color} / 0.15) 0%, hsl(var(--background)) 50%, hsl(${settings.cover_color} / 0.08) 100%)`,
+      };
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-primary/5 py-16 md:py-24">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl" />
-      </div>
+    <section className="relative overflow-hidden py-16 md:py-24" style={coverStyle}>
+      {/* Overlay for readability when using image */}
+      {settings.cover_image_url && (
+        <div className="absolute inset-0 bg-background/70" />
+      )}
+
+      {/* Background decoration (only without image) */}
+      {!settings.cover_image_url && (
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full blur-3xl" style={{ backgroundColor: `hsl(${settings.cover_color} / 0.2)` }} />
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full blur-3xl" style={{ backgroundColor: `hsl(${settings.cover_color} / 0.1)` }} />
+        </div>
+      )}
       
       <div className="container relative z-10">
         <motion.div

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { useMenuItems } from '@/hooks/useMenuItems';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
 
@@ -17,13 +17,8 @@ export function Header() {
             {settings.logo_url ? (
               <img src={settings.logo_url} alt="Logo" className="h-10 w-auto" />
             ) : (
-              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center animate-pulse-neon">
-                <Zap className="w-6 h-6 text-primary-foreground" />
-              </div>
+              <span className="text-2xl font-extrabold text-foreground">Logo</span>
             )}
-            <span className="text-2xl font-extrabold">
-              <span className="text-gradient">Compareo</span>
-            </span>
           </Link>
           
           {/* Desktop nav */}

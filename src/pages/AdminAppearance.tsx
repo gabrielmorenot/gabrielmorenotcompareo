@@ -49,6 +49,7 @@ const COLOR_FIELDS = [
   { key: 'background_color', label: 'Cor de Fundo' },
   { key: 'text_color', label: 'Cor dos Textos' },
   { key: 'button_color', label: 'Cor dos Botões' },
+  { key: 'cover_color', label: 'Cor do Cover / Hero' },
 ];
 
 export default function AdminAppearance() {
@@ -58,6 +59,7 @@ export default function AdminAppearance() {
   const [uploading, setUploading] = useState<Record<string, boolean>>({});
   const logoInputRef = useRef<HTMLInputElement>(null);
   const faviconInputRef = useRef<HTMLInputElement>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (settings) {
@@ -164,6 +166,27 @@ export default function AdminAppearance() {
                 </Button>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Cover Image */}
+        <div className="bg-card rounded-xl border border-border p-6">
+          <h2 className="text-lg font-semibold mb-4">Imagem do Cover / Hero</h2>
+          <p className="text-sm text-muted-foreground mb-4">Se definida, substitui a cor do cover por uma imagem de fundo.</p>
+          <input ref={coverInputRef} type="file" accept="image/*" className="hidden" onChange={e => { const f = e.target.files?.[0]; if (f) handleFileUpload('cover_image_url', f); }} />
+          <div className="border-2 border-dashed border-border rounded-xl p-4 text-center">
+            {form.cover_image_url ? (
+              <div className="relative inline-block">
+                <img src={form.cover_image_url} alt="Cover" className="h-32 w-full object-cover rounded-lg mx-auto" />
+                <button onClick={() => setForm({ ...form, cover_image_url: '' })} className="absolute -top-2 -right-2 w-6 h-6 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center">
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            ) : null}
+            <Button variant="outline" size="sm" className="mt-2" onClick={() => coverInputRef.current?.click()} disabled={uploading.cover_image_url}>
+              {uploading.cover_image_url ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
+              {form.cover_image_url ? 'Trocar imagem' : 'Enviar imagem de cover'}
+            </Button>
           </div>
         </div>
 
