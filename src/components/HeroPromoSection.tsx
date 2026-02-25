@@ -1,22 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useHeroPromos, type HeroPromo } from '@/hooks/useHeroPromos';
+import { useHeroPromosBySlot, type HeroPromo } from '@/hooks/useHeroPromos';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-const SIZE_TO_COLS: Record<string, number> = {
-  small: 4,
-  medium: 6,
-  large: 8,
-  full: 12,
-};
-
-function PromoSlide({ promo, isMobile }: { promo: HeroPromo; isMobile: boolean }) {
-  const imageUrl = isMobile
-    ? (promo.mobile_image_url || promo.desktop_image_url)
-    : promo.desktop_image_url;
-
+function PromoSlide({ promo }: { promo: HeroPromo }) {
   const img = (
     <img
-      src={imageUrl}
+      src={promo.image_url}
       alt=""
       className="w-full h-full object-contain"
       loading="lazy"
@@ -33,8 +22,7 @@ function PromoSlide({ promo, isMobile }: { promo: HeroPromo; isMobile: boolean }
   return img;
 }
 
-/** Carousel with vertical dots (left side) */
-function VerticalCarousel({ promos, isMobile }: { promos: HeroPromo[]; isMobile: boolean }) {
+function VerticalCarousel({ promos }: { promos: HeroPromo[] }) {
   const [current, setCurrent] = useState(0);
   const interval = (promos[0]?.autoplay_interval || 5) * 1000;
 
@@ -56,7 +44,7 @@ function VerticalCarousel({ promos, isMobile }: { promos: HeroPromo[]; isMobile:
           className="absolute inset-0 transition-opacity duration-500"
           style={{ opacity: i === current ? 1 : 0, pointerEvents: i === current ? 'auto' : 'none' }}
         >
-          <PromoSlide promo={promo} isMobile={isMobile} />
+          <PromoSlide promo={promo} />
         </div>
       ))}
       {promos.length > 1 && (
@@ -76,8 +64,7 @@ function VerticalCarousel({ promos, isMobile }: { promos: HeroPromo[]; isMobile:
   );
 }
 
-/** Carousel with horizontal dots (bottom) */
-function HorizontalCarousel({ promos, isMobile }: { promos: HeroPromo[]; isMobile: boolean }) {
+function HorizontalCarousel({ promos }: { promos: HeroPromo[] }) {
   const [current, setCurrent] = useState(0);
   const interval = (promos[0]?.autoplay_interval || 5) * 1000;
 
@@ -99,7 +86,7 @@ function HorizontalCarousel({ promos, isMobile }: { promos: HeroPromo[]; isMobil
           className="absolute inset-0 transition-opacity duration-500"
           style={{ opacity: i === current ? 1 : 0, pointerEvents: i === current ? 'auto' : 'none' }}
         >
-          <PromoSlide promo={promo} isMobile={isMobile} />
+          <PromoSlide promo={promo} />
         </div>
       ))}
       {promos.length > 1 && (
@@ -120,70 +107,49 @@ function HorizontalCarousel({ promos, isMobile }: { promos: HeroPromo[]; isMobil
 }
 
 export function HeroPromoSection() {
-  const { data: promos, isLoading } = useHeroPromos();
   const isMobile = useIsMobile();
+  const { data: desktopLeft } = useHeroPromosBySlot('desktop_left');
+  const { data: desktopRight } = useHeroPromosBySlot('desktop_right');
+  const { data: mobilePromos } = useHeroPromosBySlot('mobile');
 
-  if (isLoading || !promos || promos.length === 0) return null;
-
-  // Mobile: only show promos that admin allowed on mobile
+  // Mobile view: single carousel
   if (isMobile) {
-    const mobilePromos = promos.filter(p => p.show_on_mobile);
-    if (mobilePromos.length === 0) return null;
-
+    if (!mobilePromos || mobilePromos.length === 0) return null;
     return (
       <section className="py-4 bg-background">
         <div className="container">
-          <div className="w-full rounded-2xl overflow-hidden bg-card">
-            <HorizontalCarousel promos={mobilePromos} isMobile />
+          <div className="w-full rounded-2xl overflow-hidden bg-card" style={{ aspectRatio: '16/9' }}>
+            <HorizontalCarousel promos={mobilePromos} />
           </div>
         </div>
       </section>
     );
   }
 
-  // Desktop: group promos into rows based on grid columns (max 12 per row)
-  // First slot in each row gets vertical dots, rest get horizontal dots
-  const rows: HeroPromo[][] = [];
-  let currentRow: HeroPromo[] = [];
-  let currentCols = 0;
-
-  promos.forEach(promo => {
-    const cols = SIZE_TO_COLS[promo.banner_size] || 6;
-    if (currentCols + cols > 12 && currentRow.length > 0) {
-      rows.push(currentRow);
-      currentRow = [promo];
-      currentCols = cols;
-    } else {
-      currentRow.push(promo);
-      currentCols += cols;
-    }
-  });
-  if (currentRow.length > 0) rows.push(currentRow);
+  // Desktop view: two side-by-side carousels
+  const hasLeft = desktopLeft && desktopLeft.length > 0;
+  const hasRight = desktopRight && desktopRight.length > 0;
+  if (!hasLeft && !hasRight) return null;
 
   return (
     <section className="py-6 bg-background">
       <div className="container">
         <div className="grid grid-cols-12 gap-4">
-          {rows.flatMap((row, rowIdx) =>
-            row.map((promo, idx) => {
-              const cols = SIZE_TO_COLS[promo.banner_size] || 6;
-              const isFirstInRow = idx === 0;
-              return (
-                <div
-                  key={promo.id}
-                  className="rounded-2xl overflow-hidden bg-card"
-                  style={{ gridColumn: `span ${cols}` }}
-                >
-                  <div className="w-full" style={{ aspectRatio: '16/7' }}>
-                    {isFirstInRow ? (
-                      <VerticalCarousel promos={[promo]} isMobile={false} />
-                    ) : (
-                      <HorizontalCarousel promos={[promo]} isMobile={false} />
-                    )}
-                  </div>
-                </div>
-              );
-            })
+          {hasLeft && (
+            <div
+              className="col-span-4 rounded-2xl overflow-hidden bg-card"
+              style={{ aspectRatio: '16/9' }}
+            >
+              <VerticalCarousel promos={desktopLeft} />
+            </div>
+          )}
+          {hasRight && (
+            <div
+              className={`${hasLeft ? 'col-span-8' : 'col-span-12'} rounded-2xl overflow-hidden bg-card`}
+              style={{ aspectRatio: '16/9' }}
+            >
+              <HorizontalCarousel promos={desktopRight} />
+            </div>
           )}
         </div>
       </div>
