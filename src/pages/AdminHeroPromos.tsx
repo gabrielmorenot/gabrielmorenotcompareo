@@ -192,7 +192,7 @@ export default function AdminHeroPromos() {
             <div>
               <Label>Imagem *</Label>
               <p className="text-xs text-muted-foreground mb-1">
-                {activeTab === 'mobile' ? 'Recomendado: 800×450px' : activeTab === 'desktop_left' ? 'Recomendado: 400×225px' : 'Recomendado: 800×450px'}
+                {activeTab === 'mobile' ? 'Recomendado: 800×450px' : activeTab === 'desktop_left' ? 'Recomendado: 400×400px' : 'Recomendado: 1000×400px'}
               </p>
               {formImageUrl ? (
                 <div className="relative rounded-lg overflow-hidden border border-border">
