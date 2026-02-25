@@ -25,6 +25,7 @@ const defaultForm = {
   display_order: 0,
   active: true,
   autoplay_interval: 5,
+  show_on_mobile: true,
 };
 
 export default function AdminHeroPromos() {
@@ -53,6 +54,7 @@ export default function AdminHeroPromos() {
       display_order: promo.display_order,
       active: promo.active,
       autoplay_interval: promo.autoplay_interval,
+      show_on_mobile: promo.show_on_mobile,
     });
     setOpen(true);
   }
@@ -95,6 +97,7 @@ export default function AdminHeroPromos() {
         display_order: form.display_order,
         active: form.active,
         autoplay_interval: form.autoplay_interval,
+        show_on_mobile: form.show_on_mobile,
       };
       if (editing) {
         await updatePromo.mutateAsync({ id: editing.id, ...payload });
@@ -194,6 +197,10 @@ export default function AdminHeroPromos() {
               <div className="flex items-center gap-2">
                 <Switch checked={form.active} onCheckedChange={v => setForm({ ...form, active: v })} />
                 <Label>Ativo</Label>
+              </div>
+              <div className="flex items-center gap-2">
+                <Switch checked={form.show_on_mobile} onCheckedChange={v => setForm({ ...form, show_on_mobile: v })} />
+                <Label>Exibir no Mobile</Label>
               </div>
               <Button type="submit" className="w-full btn-neon">{editing ? 'Salvar' : 'Criar'}</Button>
             </form>

@@ -103,6 +103,7 @@ export type Database = {
           id: string
           link: string | null
           mobile_image_url: string | null
+          show_on_mobile: boolean
           updated_at: string
         }
         Insert: {
@@ -115,6 +116,7 @@ export type Database = {
           id?: string
           link?: string | null
           mobile_image_url?: string | null
+          show_on_mobile?: boolean
           updated_at?: string
         }
         Update: {
@@ -127,6 +129,7 @@ export type Database = {
           id?: string
           link?: string | null
           mobile_image_url?: string | null
+          show_on_mobile?: boolean
           updated_at?: string
         }
         Relationships: []

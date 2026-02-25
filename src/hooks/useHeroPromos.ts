@@ -10,6 +10,7 @@ export interface HeroPromo {
   display_order: number;
   active: boolean;
   autoplay_interval: number;
+  show_on_mobile: boolean;
   created_at: string;
   updated_at: string;
 }

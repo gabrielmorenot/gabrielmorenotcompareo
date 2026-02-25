@@ -1,0 +1,1 @@
+ALTER TABLE public.hero_promos ADD COLUMN show_on_mobile boolean NOT NULL DEFAULT true;
