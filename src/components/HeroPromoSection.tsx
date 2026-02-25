@@ -134,19 +134,19 @@ export function HeroPromoSection() {
   return (
     <section className="py-6 bg-background">
       <div className="container">
-        <div className="grid grid-cols-12 gap-4">
+        <div className="flex gap-4">
           {hasLeft && (
             <div
-              className="col-span-4 rounded-2xl overflow-hidden bg-card"
-              style={{ aspectRatio: '16/9' }}
+              className="rounded-2xl overflow-hidden bg-card flex-shrink-0"
+              style={{ width: '400px', height: '400px' }}
             >
               <VerticalCarousel promos={desktopLeft} />
             </div>
           )}
           {hasRight && (
             <div
-              className={`${hasLeft ? 'col-span-8' : 'col-span-12'} rounded-2xl overflow-hidden bg-card`}
-              style={{ aspectRatio: '16/9' }}
+              className="rounded-2xl overflow-hidden bg-card flex-shrink-0"
+              style={{ width: '1000px', height: '400px' }}
             >
               <HorizontalCarousel promos={desktopRight} />
             </div>
