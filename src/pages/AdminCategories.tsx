@@ -84,8 +84,16 @@ export default function AdminCategories() {
                 </div>
               </div>
               <div>
-                <Label>URL da Imagem</Label>
-                <Input value={form.image_url} onChange={e => setForm({ ...form, image_url: e.target.value })} placeholder="https://..." />
+                <Label>Imagem / Ícone personalizado</Label>
+                <p className="text-xs text-muted-foreground mb-1">
+                  Recomendado: imagem PNG transparente do produto (300×300px). Será exibida sobre o círculo neon.
+                </p>
+                <Input value={form.image_url} onChange={e => setForm({ ...form, image_url: e.target.value })} placeholder="https://exemplo.com/icone.png" />
+                {form.image_url && (
+                  <div className="mt-2 w-20 h-20 rounded-lg border border-border bg-secondary flex items-center justify-center overflow-hidden">
+                    <img src={form.image_url} alt="Preview" className="w-16 h-16 object-contain" />
+                  </div>
+                )}
               </div>
               <div className="flex items-center gap-2">
                 <Switch checked={form.active} onCheckedChange={v => setForm({ ...form, active: v })} />
