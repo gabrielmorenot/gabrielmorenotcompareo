@@ -48,24 +48,24 @@ export function CategoryFilter({ selected, onSelect }: CategoryFilterProps) {
               >
                 {/* Card */}
                 <div
-                  className={`relative w-[140px] h-[140px] md:w-[160px] md:h-[160px] rounded-2xl border-2 transition-all duration-300 flex items-center justify-center overflow-hidden ${
+                  className={`relative w-[100px] h-[100px] md:w-[160px] md:h-[160px] rounded-2xl border-2 transition-all duration-300 flex items-center justify-center overflow-hidden ${
                     selected === cat.id
                       ? 'border-primary shadow-neon bg-card'
                       : 'border-border bg-card hover:border-primary/50 hover:shadow-md'
                   }`}
                 >
                   {/* Neon circle background */}
-                  <div className="absolute w-[90px] h-[90px] md:w-[100px] md:h-[100px] rounded-full bg-primary/90" />
+                  <div className="absolute w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-full bg-primary/90" />
 
                   {/* Image or emoji */}
                   {cat.image_url ? (
                     <img
                       src={cat.image_url}
                       alt={cat.name}
-                      className="relative z-10 w-[100px] h-[100px] md:w-[110px] md:h-[110px] object-contain drop-shadow-lg"
+                      className="relative z-10 w-[70px] h-[70px] md:w-[110px] md:h-[110px] object-contain drop-shadow-lg"
                     />
                   ) : (
-                    <span className="relative z-10 text-5xl md:text-6xl drop-shadow-lg">
+                    <span className="relative z-10 text-3xl md:text-6xl drop-shadow-lg">
                       {cat.icon}
                     </span>
                   )}
@@ -73,7 +73,7 @@ export function CategoryFilter({ selected, onSelect }: CategoryFilterProps) {
 
                 {/* Label */}
                 <span
-                  className={`text-sm font-semibold text-center truncate w-[140px] md:w-[160px] transition-colors ${
+                  className={`text-xs md:text-sm font-semibold text-center truncate w-[100px] md:w-[160px] transition-colors ${
                     selected === cat.id ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
                   }`}
                 >
