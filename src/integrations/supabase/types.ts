@@ -96,40 +96,34 @@ export type Database = {
         Row: {
           active: boolean
           autoplay_interval: number | null
-          banner_size: string
           created_at: string
-          desktop_image_url: string
           display_order: number | null
           id: string
+          image_url: string
           link: string | null
-          mobile_image_url: string | null
-          show_on_mobile: boolean
+          slot: string
           updated_at: string
         }
         Insert: {
           active?: boolean
           autoplay_interval?: number | null
-          banner_size?: string
           created_at?: string
-          desktop_image_url: string
           display_order?: number | null
           id?: string
+          image_url: string
           link?: string | null
-          mobile_image_url?: string | null
-          show_on_mobile?: boolean
+          slot?: string
           updated_at?: string
         }
         Update: {
           active?: boolean
           autoplay_interval?: number | null
-          banner_size?: string
           created_at?: string
-          desktop_image_url?: string
           display_order?: number | null
           id?: string
+          image_url?: string
           link?: string | null
-          mobile_image_url?: string | null
-          show_on_mobile?: boolean
+          slot?: string
           updated_at?: string
         }
         Relationships: []

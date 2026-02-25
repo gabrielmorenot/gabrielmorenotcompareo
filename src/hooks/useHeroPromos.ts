@@ -1,18 +1,34 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
+export type HeroSlot = 'desktop_left' | 'desktop_right' | 'mobile';
+
 export interface HeroPromo {
   id: string;
-  desktop_image_url: string;
-  mobile_image_url: string | null;
+  image_url: string;
   link: string | null;
-  banner_size: 'small' | 'medium' | 'large' | 'full';
+  slot: HeroSlot;
   display_order: number;
   active: boolean;
   autoplay_interval: number;
-  show_on_mobile: boolean;
   created_at: string;
   updated_at: string;
+}
+
+export function useHeroPromosBySlot(slot: HeroSlot) {
+  return useQuery({
+    queryKey: ['hero-promos', slot],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('hero_promos')
+        .select('*')
+        .eq('active', true)
+        .eq('slot', slot)
+        .order('display_order');
+      if (error) throw error;
+      return data as HeroPromo[];
+    },
+  });
 }
 
 export function useHeroPromos() {
