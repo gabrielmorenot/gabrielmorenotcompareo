@@ -1,27 +1,7 @@
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-
-const PRODUCT_TYPES = [
-  { label: 'iPhone', emoji: '📱' },
-  { label: 'PlayStation', emoji: '🎮' },
-  { label: 'Airfryer', emoji: '🍟' },
-  { label: 'Smart TV', emoji: '📺' },
-  { label: 'Galaxy', emoji: '✨' },
-  { label: 'iPad', emoji: '📋' },
-  { label: 'Echo Dot', emoji: '🔊' },
-  { label: 'Kindle', emoji: '📖' },
-  { label: 'Apple Watch', emoji: '⌚' },
-  { label: 'AirPods', emoji: '🎧' },
-  { label: 'Xbox', emoji: '🕹️' },
-  { label: 'Nintendo Switch', emoji: '🎲' },
-  { label: 'Robô Aspirador', emoji: '🤖' },
-  { label: 'Cafeteira', emoji: '☕' },
-  { label: 'Soundbar', emoji: '🔈' },
-  { label: 'Câmera', emoji: '📷' },
-  { label: 'Drone', emoji: '🚁' },
-  { label: 'Monitor', emoji: '🖥️' },
-];
+import { useProductTypes } from '@/hooks/useProductTypes';
 
 interface ProductTypesSectionProps {
   selected: string | null;
@@ -29,6 +9,7 @@ interface ProductTypesSectionProps {
 }
 
 export function ProductTypesSection({ selected, onSelect }: ProductTypesSectionProps) {
+  const { data: productTypes } = useProductTypes();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (dir: 'left' | 'right') => {
@@ -53,33 +34,41 @@ export function ProductTypesSection({ selected, onSelect }: ProductTypesSectionP
             className="flex gap-4 overflow-x-auto scrollbar-hide px-8 md:px-10 py-2"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {PRODUCT_TYPES.map((type) => (
+            {productTypes?.map((type) => (
               <motion.button
-                key={type.label}
+                key={type.id}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => onSelect(selected === type.label ? null : type.label)}
+                onClick={() => onSelect(selected === type.name ? null : type.name)}
                 className="flex-shrink-0 flex flex-col items-center gap-2 group cursor-pointer"
               >
                 <div
                   className={`relative w-[100px] h-[100px] md:w-[160px] md:h-[160px] rounded-2xl border-2 transition-all duration-300 flex items-center justify-center overflow-hidden ${
-                    selected === type.label
+                    selected === type.name
                       ? 'border-primary shadow-neon bg-card'
                       : 'border-border bg-card hover:border-primary/50 hover:shadow-md'
                   }`}
                 >
                   <div className="absolute w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-full bg-primary/90" />
-                  <span className="relative z-10 text-3xl md:text-6xl drop-shadow-lg">
-                    {type.emoji}
-                  </span>
+                  {type.image_url ? (
+                    <img
+                      src={type.image_url}
+                      alt={type.name}
+                      className="relative z-10 w-[70px] h-[70px] md:w-[110px] md:h-[110px] object-contain drop-shadow-lg"
+                    />
+                  ) : (
+                    <span className="relative z-10 text-3xl md:text-6xl drop-shadow-lg">
+                      {type.emoji}
+                    </span>
+                  )}
                 </div>
 
                 <span
                   className={`text-xs md:text-sm font-semibold text-center truncate w-[100px] md:w-[160px] transition-colors ${
-                    selected === type.label ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
+                    selected === type.name ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
                   }`}
                 >
-                  {type.label}
+                  {type.name}
                 </span>
               </motion.button>
             ))}
