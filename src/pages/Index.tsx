@@ -5,6 +5,7 @@ import { HeroSection } from '@/components/HeroSection';
 import { CategoryFilter } from '@/components/CategoryFilter';
 import { BannerSection } from '@/components/BannerSection';
 import { HeroPromoSection } from '@/components/HeroPromoSection';
+import { StoresSection } from '@/components/StoresSection';
 import { OfferCard } from '@/components/OfferCard';
 import { useOffers, useBanners } from '@/hooks/useData';
 import { useCategories } from '@/hooks/useCategories';
@@ -65,6 +66,8 @@ const Index = () => {
             )}
           </div>
         </section>
+        
+        <StoresSection />
         
         <BannerSection banners={banners || []} />
       </main>

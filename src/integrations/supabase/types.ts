@@ -308,7 +308,9 @@ export type Database = {
       stores: {
         Row: {
           active: boolean
+          cashback_percent: number | null
           created_at: string
+          cta_text: string | null
           id: string
           link: string | null
           logo_url: string | null
@@ -317,7 +319,9 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          cashback_percent?: number | null
           created_at?: string
+          cta_text?: string | null
           id?: string
           link?: string | null
           logo_url?: string | null
@@ -326,7 +330,9 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          cashback_percent?: number | null
           created_at?: string
+          cta_text?: string | null
           id?: string
           link?: string | null
           logo_url?: string | null

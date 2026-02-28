@@ -6,6 +6,8 @@ export interface Store {
   logo_url: string | null;
   link: string | null;
   active: boolean;
+  cashback_percent: number;
+  cta_text: string | null;
   created_at: string;
   updated_at: string;
 }
