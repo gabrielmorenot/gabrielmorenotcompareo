@@ -26,48 +26,73 @@ const Index = () => {
       <Header />
       
       <main className="flex-grow">
-        <HeroSection />
-        
-        <HeroPromoSection />
-        
-        <CategoryFilter selected={selectedCategory} onSelect={setSelectedCategory} />
-        
-        {/* Ofertas do Dia */}
+        {/* 1. Ofertas do Dia */}
         <section id="ofertas" className="py-12 bg-background">
           <div className="container">
-            <h2 className="section-title">
-              {selectedCategoryName ? `Ofertas em ${selectedCategoryName}` : 'Ofertas do Dia'}
-            </h2>
+            <h2 className="section-title">Ofertas do Dia</h2>
             
-            {loadingOffers ? (
+            {loadingOffers && !selectedCategory ? (
               <div className="flex items-center justify-center py-20">
                 <Loader2 className="w-8 h-8 animate-spin text-primary" />
               </div>
-            ) : offers && offers.length > 0 ? (
+            ) : offers && offers.length > 0 && !selectedCategory ? (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                 {offers.map((offer) => (
                   <OfferCard key={offer.id} offer={offer} />
                 ))}
               </div>
-            ) : (
+            ) : !selectedCategory ? (
               <div className="text-center py-20">
-                <p className="text-muted-foreground">
-                  Nenhuma oferta encontrada{selectedCategory ? ' nesta categoria' : ''}.
-                </p>
-                {selectedCategory && (
+                <p className="text-muted-foreground">Nenhuma oferta encontrada.</p>
+              </div>
+            ) : null}
+          </div>
+        </section>
+
+        {/* 2. Hero Slides */}
+        <HeroPromoSection />
+
+        {/* 3. Categorias */}
+        <CategoryFilter selected={selectedCategory} onSelect={setSelectedCategory} />
+
+        {/* 4. Resultado do filtro por categoria */}
+        {selectedCategory && (
+          <section className="py-12 bg-background">
+            <div className="container">
+              <h2 className="section-title">
+                {selectedCategoryName ? `Ofertas em ${selectedCategoryName}` : 'Ofertas'}
+              </h2>
+              
+              {loadingOffers ? (
+                <div className="flex items-center justify-center py-20">
+                  <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                </div>
+              ) : offers && offers.length > 0 ? (
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                  {offers.map((offer) => (
+                    <OfferCard key={offer.id} offer={offer} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-20">
+                  <p className="text-muted-foreground">Nenhuma oferta encontrada nesta categoria.</p>
                   <button
                     onClick={() => setSelectedCategory(null)}
                     className="mt-4 text-primary font-medium hover:underline"
                   >
                     Ver todas as ofertas
                   </button>
-                )}
-              </div>
-            )}
-          </div>
-        </section>
-        
+                </div>
+              )}
+            </div>
+          </section>
+        )}
+
+        {/* 5. Lojas Confiáveis */}
         <StoresSection />
+
+        {/* 6. Conteúdo do Header (Hero) */}
+        <HeroSection />
         
         <BannerSection banners={banners || []} />
       </main>
