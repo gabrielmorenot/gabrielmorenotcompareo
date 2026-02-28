@@ -62,7 +62,7 @@ export function BannerPairSection({ banners }: BannerPairSectionProps) {
     <section className="py-12 bg-background">
       <div className="container">
         {/* Desktop: side by side */}
-        <div className="hidden md:flex gap-6">
+        <div className="hidden md:grid md:grid-cols-2 gap-6">
           {items.map((b, i) => renderCard(b, i))}
         </div>
 
