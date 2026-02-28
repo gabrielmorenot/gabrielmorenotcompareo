@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useCallback } from 'react';
 import type { Banner } from '@/types';
-import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface BannerPairSectionProps {
   banners: Banner[];
@@ -22,38 +22,41 @@ export function BannerPairSection({ banners }: BannerPairSectionProps) {
 
   if (items.length === 0) return null;
 
-  const renderCard = (banner: Banner, index: number) => (
-    <motion.div
-      key={banner.id}
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
-      className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex-1"
-    >
-      <div className="p-6 relative z-10">
-        <h3 className="text-xl font-bold mb-2">{banner.title}</h3>
-        {banner.subtitle && (
-          <p className="text-muted-foreground mb-4">{banner.subtitle}</p>
+  const renderCard = (banner: Banner, index: number) => {
+    const content = (
+      <motion.div
+        key={banner.id}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: index * 0.1 }}
+        className="relative rounded-2xl overflow-hidden flex-1 aspect-[16/5] md:aspect-[16/6] bg-card border border-border cursor-pointer hover:opacity-90 transition-opacity"
+      >
+        {banner.image_url && (
+          <>
+            <img
+              src={banner.image_url}
+              alt={banner.title || ''}
+              className="w-full h-full object-cover hidden md:block"
+            />
+            <img
+              src={(banner as any).mobile_image_url || banner.image_url}
+              alt={banner.title || ''}
+              className="w-full h-full object-cover md:hidden"
+            />
+          </>
         )}
-        {banner.button_link && (
-          <a
-            href={banner.button_link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-neon inline-flex items-center gap-2 text-sm"
-          >
-            {banner.button_text || 'Ver ofertas'}
-            <ArrowRight className="w-4 h-4" />
-          </a>
-        )}
-      </div>
-      {banner.image_url && (
-        <div className="absolute bottom-0 right-0 w-32 h-32 opacity-30">
-          <img src={banner.image_url} alt="" className="w-full h-full object-contain" />
-        </div>
-      )}
-    </motion.div>
-  );
+      </motion.div>
+    );
+
+    if (banner.button_link) {
+      return (
+        <a key={banner.id} href={banner.button_link} target="_blank" rel="noopener noreferrer" className="flex-1">
+          {content}
+        </a>
+      );
+    }
+    return content;
+  };
 
   return (
     <section className="py-12 bg-background">

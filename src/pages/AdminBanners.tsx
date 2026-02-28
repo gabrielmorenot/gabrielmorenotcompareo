@@ -16,13 +16,13 @@ export default function AdminBanners() {
   const deleteBanner = useDeleteBanner();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Banner | null>(null);
-  const [form, setForm] = useState({ title: '', subtitle: '', image_url: '', mobile_image_url: '', button_text: 'Ver ofertas', button_link: '', display_order: 0, active: true });
+  const [form, setForm] = useState({ title: 'Banner', image_url: '', mobile_image_url: '', button_link: '', display_order: 0, active: true });
 
-  function resetForm() { setForm({ title: '', subtitle: '', image_url: '', mobile_image_url: '', button_text: 'Ver ofertas', button_link: '', display_order: 0, active: true }); setEditing(null); }
+  function resetForm() { setForm({ title: 'Banner', image_url: '', mobile_image_url: '', button_link: '', display_order: 0, active: true }); setEditing(null); }
 
   function handleEdit(banner: Banner) {
     setEditing(banner);
-    setForm({ title: banner.title, subtitle: banner.subtitle || '', image_url: banner.image_url || '', mobile_image_url: (banner as any).mobile_image_url || '', button_text: banner.button_text || 'Ver ofertas', button_link: banner.button_link || '', display_order: banner.display_order, active: banner.active });
+    setForm({ title: banner.title || 'Banner', image_url: banner.image_url || '', mobile_image_url: (banner as any).mobile_image_url || '', button_link: banner.button_link || '', display_order: banner.display_order, active: banner.active });
     setOpen(true);
   }
 
@@ -49,14 +49,9 @@ export default function AdminBanners() {
           <DialogContent>
             <DialogHeader><DialogTitle>{editing ? 'Editar Banner' : 'Novo Banner'}</DialogTitle></DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div><Label>Título</Label><Input value={form.title} onChange={e => setForm({...form, title: e.target.value})} required /></div>
-              <div><Label>Subtítulo</Label><Input value={form.subtitle} onChange={e => setForm({...form, subtitle: e.target.value})} /></div>
-              <div><Label>Imagem Desktop (URL)</Label><Input value={form.image_url} onChange={e => setForm({...form, image_url: e.target.value})} /></div>
+              <div><Label>Imagem Desktop (URL)</Label><Input value={form.image_url} onChange={e => setForm({...form, image_url: e.target.value})} required /></div>
               <div><Label>Imagem Mobile (URL)</Label><Input value={form.mobile_image_url} onChange={e => setForm({...form, mobile_image_url: e.target.value})} /></div>
-              <div className="grid grid-cols-2 gap-4">
-                <div><Label>Texto do Botão</Label><Input value={form.button_text} onChange={e => setForm({...form, button_text: e.target.value})} /></div>
-                <div><Label>Link do Botão</Label><Input value={form.button_link} onChange={e => setForm({...form, button_link: e.target.value})} /></div>
-              </div>
+              <div><Label>Link (destino ao clicar)</Label><Input value={form.button_link} onChange={e => setForm({...form, button_link: e.target.value})} placeholder="https://blog.compareo.com.br/..." /></div>
               <div className="grid grid-cols-2 gap-4">
                 <div><Label>Ordem</Label><Input type="number" value={form.display_order} onChange={e => setForm({...form, display_order: parseInt(e.target.value) || 0})} /></div>
                 <div className="flex items-center gap-2 pt-6"><Switch checked={form.active} onCheckedChange={v => setForm({...form, active: v})} /><Label>Ativo</Label></div>
@@ -70,13 +65,15 @@ export default function AdminBanners() {
       {isLoading ? <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin" /></div> : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {banners?.map(banner => (
-            <div key={banner.id} className="bg-card rounded-xl border border-border p-4">
-              <h3 className="font-semibold">{banner.title}</h3>
-              <p className="text-sm text-muted-foreground">{banner.subtitle}</p>
-              <div className="flex gap-2 mt-4">
-                <Button variant="outline" size="sm" onClick={() => handleEdit(banner)}><Pencil className="w-4 h-4" /></Button>
-                <Button variant="outline" size="sm" onClick={() => handleDelete(banner.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
-              </div>
+             <div key={banner.id} className="bg-card rounded-xl border border-border overflow-hidden">
+               {banner.image_url && <img src={banner.image_url} alt="" className="w-full h-32 object-cover" />}
+               <div className="p-4">
+                 <p className="text-xs text-muted-foreground truncate mb-2">{banner.button_link || 'Sem link'}</p>
+                 <div className="flex gap-2">
+                   <Button variant="outline" size="sm" onClick={() => handleEdit(banner)}><Pencil className="w-4 h-4" /></Button>
+                   <Button variant="outline" size="sm" onClick={() => handleDelete(banner.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
+                 </div>
+               </div>
             </div>
           ))}
         </div>
