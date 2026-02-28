@@ -36,19 +36,10 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
-            <Link 
-              to="/admin" 
-              className="hidden md:inline text-xs font-medium text-muted-foreground hover:text-foreground transition-colors opacity-50 hover:opacity-100"
-            >
-              Admin
-            </Link>
-            
-            {/* Mobile hamburger */}
-            <button className="md:hidden p-2" onClick={() => setMobileOpen(!mobileOpen)}>
-              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+          {/* Mobile hamburger */}
+          <button className="md:hidden p-2" onClick={() => setMobileOpen(!mobileOpen)}>
+            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
         </div>
 
         {/* Mobile menu */}
@@ -65,7 +56,6 @@ export function Header() {
                 </a>
               )
             ))}
-            <Link to="/admin" className="block text-xs text-muted-foreground" onClick={() => setMobileOpen(false)}>Admin</Link>
           </nav>
         )}
       </div>
