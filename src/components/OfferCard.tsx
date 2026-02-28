@@ -65,7 +65,7 @@ export function OfferCard({ offer }: OfferCardProps) {
               R$ {Number(offer.price).toFixed(2).replace('.', ',')}
             </p>
             
-            <span className="btn-neon w-full mt-3 inline-flex items-center justify-center gap-2 text-sm whitespace-nowrap">
+            <span className="w-full mt-3 inline-flex items-center justify-center gap-2 text-sm whitespace-nowrap bg-foreground text-primary font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:opacity-90">
               Ver oferta
               <ChevronRight className="w-4 h-4" />
             </span>
