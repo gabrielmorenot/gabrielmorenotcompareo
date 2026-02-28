@@ -1,6 +1,26 @@
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { useStores } from '@/hooks/useData';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+
+function Storelogo({ name, logoUrl }: { name: string; logoUrl: string | null }) {
+  const [failed, setFailed] = useState(false);
+  const showFallback = !logoUrl || failed;
+
+  return (
+    <div className="w-[70px] h-[70px] md:w-[80px] md:h-[80px] rounded-full bg-muted flex items-center justify-center overflow-hidden">
+      {showFallback ? (
+        <span className="text-2xl font-bold text-muted-foreground">{name.charAt(0)}</span>
+      ) : (
+        <img
+          src={logoUrl}
+          alt={name}
+          className="w-full h-full object-contain p-2"
+          onError={() => setFailed(true)}
+        />
+      )}
+    </div>
+  );
+}
 
 export function StoresSection() {
   const { data: stores } = useStores();
@@ -61,19 +81,7 @@ export function StoresSection() {
                 className="snap-start flex-shrink-0 w-[130px] md:w-[150px] rounded-2xl border-2 border-border bg-card hover:border-primary/50 hover:shadow-md transition-all duration-300 p-4 flex flex-col items-center gap-2 group"
               >
                 {/* Logo circle */}
-                <div className="w-[70px] h-[70px] md:w-[80px] md:h-[80px] rounded-full bg-muted flex items-center justify-center overflow-hidden">
-                  {store.logo_url ? (
-                    <img
-                      src={store.logo_url}
-                      alt={store.name}
-                      className="w-full h-full object-contain p-2"
-                    />
-                  ) : (
-                    <span className="text-2xl font-bold text-muted-foreground">
-                      {store.name.charAt(0)}
-                    </span>
-                  )}
-                </div>
+                <Storelogo name={store.name} logoUrl={store.logo_url} />
 
                 {/* Name */}
                 <span className="text-xs md:text-sm font-semibold text-center truncate w-full">
