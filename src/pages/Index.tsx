@@ -75,8 +75,8 @@ const Index = () => {
                 <Loader2 className="w-8 h-8 animate-spin text-primary" />
               </div>
             ) : dailyOffers && dailyOffers.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-                {dailyOffers.map((offer) => (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
+                {dailyOffers.slice(0, 10).map((offer) => (
                   <OfferCard key={offer.id} offer={offer} />
                 ))}
               </div>
