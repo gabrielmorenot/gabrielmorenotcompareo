@@ -7,7 +7,7 @@ function Storelogo({ name, logoUrl }: { name: string; logoUrl: string | null }) 
   const showFallback = !logoUrl || failed;
 
   return (
-    <div className="w-[70px] h-[70px] md:w-[80px] md:h-[80px] rounded-full bg-muted flex items-center justify-center overflow-hidden">
+    <div className="w-[70px] h-[70px] md:w-[80px] md:h-[80px] rounded-full bg-card flex items-center justify-center overflow-hidden">
       {showFallback ? (
         <span className="text-2xl font-bold text-muted-foreground">{name.charAt(0)}</span>
       ) : (
