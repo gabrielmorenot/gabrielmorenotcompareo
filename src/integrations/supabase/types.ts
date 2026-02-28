@@ -281,6 +281,39 @@ export type Database = {
         }
         Relationships: []
       }
+      product_types: {
+        Row: {
+          active: boolean
+          created_at: string
+          display_order: number | null
+          emoji: string | null
+          id: string
+          image_url: string | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          display_order?: number | null
+          emoji?: string | null
+          id?: string
+          image_url?: string | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          display_order?: number | null
+          emoji?: string | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           created_at: string
