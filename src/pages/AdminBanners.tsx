@@ -1,84 +1,85 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useAllBanners, useCreateBanner, useUpdateBanner, useDeleteBanner } from '@/hooks/useData';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
-import { Plus, Pencil, Trash2, Loader2, Upload } from 'lucide-react';
+import { Plus, Pencil, Trash2, Loader2, Upload, X } from 'lucide-react';
 import type { Banner } from '@/types';
 import { toast } from 'sonner';
-
-async function uploadBannerImage(file: File, prefix: string): Promise<string> {
-  const ext = file.name.split('.').pop();
-  const path = `banners/${prefix}-${Date.now()}.${ext}`;
-  const { error } = await supabase.storage.from('site-assets').upload(path, file, { upsert: true });
-  if (error) throw error;
-  const { data } = supabase.storage.from('site-assets').getPublicUrl(path);
-  return data.publicUrl;
-}
 
 export default function AdminBanners() {
   const { data: banners, isLoading } = useAllBanners();
   const createBanner = useCreateBanner();
   const updateBanner = useUpdateBanner();
   const deleteBanner = useDeleteBanner();
-  const [open, setOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Banner | null>(null);
-  const [form, setForm] = useState({ title: 'Banner', image_url: '', mobile_image_url: '', button_link: '', display_order: 0, active: true });
+  const [formImageUrl, setFormImageUrl] = useState('');
+  const [formLink, setFormLink] = useState('');
+  const [formOrder, setFormOrder] = useState(0);
+  const [formActive, setFormActive] = useState(true);
   const [uploading, setUploading] = useState(false);
-  const [desktopPreview, setDesktopPreview] = useState<string | null>(null);
-  const [mobilePreview, setMobilePreview] = useState<string | null>(null);
-  const desktopRef = useRef<HTMLInputElement>(null);
-  const mobileRef = useRef<HTMLInputElement>(null);
 
   function resetForm() {
-    setForm({ title: 'Banner', image_url: '', mobile_image_url: '', button_link: '', display_order: 0, active: true });
+    setFormImageUrl('');
+    setFormLink('');
+    setFormOrder(banners?.length || 0);
+    setFormActive(true);
     setEditing(null);
-    setDesktopPreview(null);
-    setMobilePreview(null);
   }
 
-  function handleEdit(banner: Banner) {
+  function openCreate() {
+    resetForm();
+    setDialogOpen(true);
+  }
+
+  function openEdit(banner: Banner) {
     setEditing(banner);
-    setForm({
-      title: banner.title || 'Banner',
-      image_url: banner.image_url || '',
-      mobile_image_url: (banner as any).mobile_image_url || '',
-      button_link: banner.button_link || '',
-      display_order: banner.display_order ?? 0,
-      active: banner.active,
-    });
-    setDesktopPreview(banner.image_url || null);
-    setMobilePreview((banner as any).mobile_image_url || null);
-    setOpen(true);
+    setFormImageUrl(banner.image_url || '');
+    setFormLink(banner.button_link || '');
+    setFormOrder(banner.display_order ?? 0);
+    setFormActive(banner.active);
+    setDialogOpen(true);
   }
 
-  function handleFilePreview(file: File, setter: (url: string) => void) {
-    const reader = new FileReader();
-    reader.onload = (e) => setter(e.target?.result as string);
-    reader.readAsDataURL(file);
+  async function handleImageUpload(file: File) {
+    setUploading(true);
+    try {
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('Imagem deve ter no máximo 2MB');
+        return;
+      }
+      const ext = file.name.split('.').pop();
+      const path = `banners/${Date.now()}.${ext}`;
+      const { error } = await supabase.storage.from('site-assets').upload(path, file);
+      if (error) throw error;
+      const { data: { publicUrl } } = supabase.storage.from('site-assets').getPublicUrl(path);
+      setFormImageUrl(publicUrl);
+      toast.success('Imagem enviada!');
+    } catch {
+      toast.error('Erro ao enviar imagem');
+    } finally {
+      setUploading(false);
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setUploading(true);
+    if (!formImageUrl) {
+      toast.error('Imagem é obrigatória');
+      return;
+    }
     try {
-      let image_url = form.image_url;
-      let mobile_image_url = form.mobile_image_url;
-
-      // Upload desktop image if a new file was selected
-      if (desktopRef.current?.files?.[0]) {
-        image_url = await uploadBannerImage(desktopRef.current.files[0], 'desktop');
-      }
-      // Upload mobile image if a new file was selected
-      if (mobileRef.current?.files?.[0]) {
-        mobile_image_url = await uploadBannerImage(mobileRef.current.files[0], 'mobile');
-      }
-
-      const payload = { ...form, image_url, mobile_image_url };
-
+      const payload = {
+        title: 'Banner',
+        image_url: formImageUrl,
+        button_link: formLink || null,
+        display_order: formOrder,
+        active: formActive,
+      };
       if (editing) {
         await updateBanner.mutateAsync({ id: editing.id, ...payload } as any);
         toast.success('Banner atualizado!');
@@ -86,12 +87,10 @@ export default function AdminBanners() {
         await createBanner.mutateAsync(payload as any);
         toast.success('Banner criado!');
       }
-      setOpen(false);
+      setDialogOpen(false);
       resetForm();
     } catch {
       toast.error('Erro ao salvar');
-    } finally {
-      setUploading(false);
     }
   }
 
@@ -108,115 +107,36 @@ export default function AdminBanners() {
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Banners</h1>
-        <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) resetForm(); }}>
-          <DialogTrigger asChild>
-            <Button className="btn-neon"><Plus className="w-4 h-4 mr-2" />Novo Banner</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{editing ? 'Editar Banner' : 'Novo Banner'}</DialogTitle>
-            </DialogHeader>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Desktop image upload */}
-              <div>
-                <Label>Imagem Desktop</Label>
-                <div
-                  className="mt-1 border-2 border-dashed border-border rounded-lg p-4 text-center cursor-pointer hover:border-primary transition-colors"
-                  onClick={() => desktopRef.current?.click()}
-                >
-                  {desktopPreview ? (
-                    <img src={desktopPreview} alt="Preview desktop" className="w-full h-28 object-cover rounded-lg" />
-                  ) : (
-                    <div className="flex flex-col items-center gap-1 text-muted-foreground">
-                      <Upload className="w-6 h-6" />
-                      <span className="text-sm">Clique para enviar</span>
-                    </div>
-                  )}
-                </div>
-                <input
-                  ref={desktopRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleFilePreview(file, setDesktopPreview);
-                  }}
-                />
-              </div>
-
-              {/* Mobile image upload */}
-              <div>
-                <Label>Imagem Mobile (opcional)</Label>
-                <div
-                  className="mt-1 border-2 border-dashed border-border rounded-lg p-4 text-center cursor-pointer hover:border-primary transition-colors"
-                  onClick={() => mobileRef.current?.click()}
-                >
-                  {mobilePreview ? (
-                    <img src={mobilePreview} alt="Preview mobile" className="w-full h-28 object-cover rounded-lg" />
-                  ) : (
-                    <div className="flex flex-col items-center gap-1 text-muted-foreground">
-                      <Upload className="w-6 h-6" />
-                      <span className="text-sm">Clique para enviar</span>
-                    </div>
-                  )}
-                </div>
-                <input
-                  ref={mobileRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleFilePreview(file, setMobilePreview);
-                  }}
-                />
-              </div>
-
-              <div>
-                <Label>Link (destino ao clicar)</Label>
-                <Input
-                  value={form.button_link}
-                  onChange={e => setForm({ ...form, button_link: e.target.value })}
-                  placeholder="https://blog.compareo.com.br/..."
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Ordem</Label>
-                  <Input
-                    type="number"
-                    value={form.display_order}
-                    onChange={e => setForm({ ...form, display_order: parseInt(e.target.value) || 0 })}
-                  />
-                </div>
-                <div className="flex items-center gap-2 pt-6">
-                  <Switch checked={form.active} onCheckedChange={v => setForm({ ...form, active: v })} />
-                  <Label>Ativo</Label>
-                </div>
-              </div>
-
-              <Button type="submit" className="w-full btn-neon" disabled={uploading}>
-                {uploading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Enviando...</> : editing ? 'Salvar' : 'Criar'}
-              </Button>
-            </form>
-          </DialogContent>
-        </Dialog>
+        <div>
+          <h1 className="text-2xl font-bold">Banners</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Desktop: 2 banners lado a lado (50/50) • Mobile: carrossel com todos os banners
+          </p>
+        </div>
+        <Button onClick={openCreate} className="btn-neon">
+          <Plus className="w-4 h-4 mr-2" />Novo Banner
+        </Button>
       </div>
 
       {isLoading ? (
         <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin" /></div>
+      ) : !banners?.length ? (
+        <div className="text-center py-16 text-muted-foreground">Nenhum banner criado</div>
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {banners?.map(banner => (
+          {banners.map(banner => (
             <div key={banner.id} className="bg-card rounded-xl border border-border overflow-hidden">
-              {banner.image_url && <img src={banner.image_url} alt="" className="w-full h-32 object-cover" />}
+              {banner.image_url && <img src={banner.image_url} alt="" className="w-full h-36 object-cover" />}
               <div className="p-4">
-                <p className="text-xs text-muted-foreground truncate mb-2">{banner.button_link || 'Sem link'}</p>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" onClick={() => handleEdit(banner)}><Pencil className="w-4 h-4" /></Button>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${banner.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                    {banner.active ? 'Ativo' : 'Inativo'}
+                  </span>
+                  <span className="text-xs text-muted-foreground">Ordem: {banner.display_order}</span>
+                </div>
+                {banner.button_link && <p className="text-xs text-muted-foreground truncate">{banner.button_link}</p>}
+                <div className="flex gap-2 mt-3">
+                  <Button variant="outline" size="sm" onClick={() => openEdit(banner)}><Pencil className="w-4 h-4" /></Button>
                   <Button variant="outline" size="sm" onClick={() => handleDelete(banner.id)}><Trash2 className="w-4 h-4 text-destructive" /></Button>
                 </div>
               </div>
@@ -224,6 +144,60 @@ export default function AdminBanners() {
           ))}
         </div>
       )}
+
+      <Dialog open={dialogOpen} onOpenChange={v => { setDialogOpen(v); if (!v) resetForm(); }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{editing ? 'Editar Banner' : 'Novo Banner'}</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label>Imagem *</Label>
+              <p className="text-xs text-muted-foreground mb-1">Recomendado: 700×250px</p>
+              {formImageUrl ? (
+                <div className="relative rounded-lg overflow-hidden border border-border">
+                  <img src={formImageUrl} alt="" className="w-full h-32 object-contain bg-muted" />
+                  <button
+                    type="button"
+                    onClick={() => setFormImageUrl('')}
+                    className="absolute top-2 right-2 bg-destructive text-destructive-foreground rounded-full p-1"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ) : (
+                <label className="flex flex-col items-center justify-center h-28 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary transition-colors">
+                  {uploading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                    <>
+                      <Upload className="w-6 h-6 mb-1 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground">Clique para enviar</span>
+                    </>
+                  )}
+                  <input type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && handleImageUpload(e.target.files[0])} />
+                </label>
+              )}
+            </div>
+
+            <div>
+              <Label>Link (destino ao clicar)</Label>
+              <Input value={formLink} onChange={e => setFormLink(e.target.value)} placeholder="https://blog.compareo.com.br/..." />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label>Ordem</Label>
+                <Input type="number" value={formOrder} onChange={e => setFormOrder(parseInt(e.target.value) || 0)} />
+              </div>
+              <div className="flex items-center gap-2 pt-6">
+                <Switch checked={formActive} onCheckedChange={setFormActive} />
+                <Label>Ativo</Label>
+              </div>
+            </div>
+
+            <Button type="submit" className="w-full btn-neon">{editing ? 'Salvar' : 'Criar'}</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
