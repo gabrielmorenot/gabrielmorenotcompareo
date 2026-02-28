@@ -13,7 +13,8 @@ import { Loader2 } from 'lucide-react';
 
 const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const { data: offers, isLoading: loadingOffers } = useOffers(selectedCategory as any);
+  const { data: dailyOffers, isLoading: loadingDaily } = useOffers(null);
+  const { data: filteredOffers, isLoading: loadingFiltered } = useOffers(selectedCategory as any);
   const { data: banners } = useBanners();
   const { data: categories } = useCategories();
 
@@ -31,21 +32,21 @@ const Index = () => {
           <div className="container">
             <h2 className="section-title">Ofertas do Dia</h2>
             
-            {loadingOffers && !selectedCategory ? (
+            {loadingDaily ? (
               <div className="flex items-center justify-center py-20">
                 <Loader2 className="w-8 h-8 animate-spin text-primary" />
               </div>
-            ) : offers && offers.length > 0 && !selectedCategory ? (
+            ) : dailyOffers && dailyOffers.length > 0 ? (
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                {offers.map((offer) => (
+                {dailyOffers.map((offer) => (
                   <OfferCard key={offer.id} offer={offer} />
                 ))}
               </div>
-            ) : !selectedCategory ? (
+            ) : (
               <div className="text-center py-20">
                 <p className="text-muted-foreground">Nenhuma oferta encontrada.</p>
               </div>
-            ) : null}
+            )}
           </div>
         </section>
 
@@ -63,13 +64,13 @@ const Index = () => {
                 {selectedCategoryName ? `Ofertas em ${selectedCategoryName}` : 'Ofertas'}
               </h2>
               
-              {loadingOffers ? (
+              {loadingFiltered ? (
                 <div className="flex items-center justify-center py-20">
                   <Loader2 className="w-8 h-8 animate-spin text-primary" />
                 </div>
-              ) : offers && offers.length > 0 ? (
+              ) : filteredOffers && filteredOffers.length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                  {offers.map((offer) => (
+                  {filteredOffers.map((offer) => (
                     <OfferCard key={offer.id} offer={offer} />
                   ))}
                 </div>
