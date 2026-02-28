@@ -58,7 +58,7 @@ export function Footer() {
           <div id="lojas">
             <h4 className="font-bold mb-4">Lojas Parceiras</h4>
             <ul className="space-y-2 text-sm">
-              {stores?.slice(0, 5).map((store) => (
+              {stores?.map((store) => (
                 <li key={store.id}>
                   {store.link ? (
                     <a
