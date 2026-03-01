@@ -5,6 +5,8 @@ import { useMenuItems } from '@/hooks/useMenuItems';
 import { useCategories } from '@/hooks/useCategories';
 import { useProductTypes } from '@/hooks/useProductTypes';
 import { useSiteSettings } from '@/hooks/useSiteSettings';
+import { useIsMobile } from '@/hooks/use-mobile';
+import logoIcon from '@/assets/logo-icon.png';
 
 const POPULAR_SUGGESTIONS = ['iphone', 'notebook', 'geladeira', 'celular', 'smart tv', 'air fryer'];
 
@@ -13,16 +15,25 @@ export function Header() {
   const [catOpen, setCatOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { data: menuItems } = useMenuItems();
   const { data: categories } = useCategories();
   const { data: productTypes } = useProductTypes();
   const { settings } = useSiteSettings();
+  const isMobile = useIsMobile();
   const navigate = useNavigate();
   const subNavRef = useRef<HTMLDivElement>(null);
   const catRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+
+  // Detect scroll for compact mobile header
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // Close categories dropdown on outside click
   useEffect(() => {
@@ -81,6 +92,74 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 shadow-sm">
+      {/* Compact mobile header when scrolled */}
+      {isMobile && scrolled ? (
+        <div className="bg-card border-b border-border">
+          <div className="container py-2">
+            <div className="flex items-center gap-3">
+              <button className="p-1.5 text-foreground flex-shrink-0" onClick={() => setMobileOpen(!mobileOpen)}>
+                {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
+              <Link to="/" className="flex-shrink-0">
+                <img src={logoIcon} alt="Logo" className="w-8 h-8 object-contain" />
+              </Link>
+              <div className="flex-1 min-w-0 relative" ref={searchRef}>
+                <form onSubmit={handleSearch}>
+                  <div className="relative w-full">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={e => setSearchQuery(e.target.value)}
+                      onFocus={() => setShowSuggestions(true)}
+                      placeholder="Pesquisar..."
+                      className="w-full h-9 pl-3 pr-9 rounded-lg bg-secondary text-foreground border border-border outline-none text-xs placeholder:text-muted-foreground"
+                    />
+                    <button type="submit" className="absolute right-0 top-0 h-full px-2 flex items-center text-muted-foreground">
+                      <Search className="w-4 h-4" />
+                    </button>
+                  </div>
+                </form>
+                {showSuggestions && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-card rounded-lg border border-border shadow-lg z-50 py-2 px-3 animate-fade-in">
+                    <p className="text-xs font-semibold text-foreground mb-1.5 flex items-center gap-1">🔥 Popular</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {POPULAR_SUGGESTIONS.map(term => (
+                        <button key={term} onClick={() => handleSuggestionClick(term)} className="px-2 py-1 text-xs rounded-full border border-border text-foreground hover:bg-secondary transition-colors">
+                          {term}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            {/* Mobile menu in compact mode */}
+            {mobileOpen && (
+              <nav className="border-t border-border mt-2 pt-2 pb-2 space-y-1">
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Categorias</p>
+                {categories?.map(cat => (
+                  <button key={cat.id} onClick={() => { handleSuggestionClick(cat.name); setMobileOpen(false); }} className="block text-sm font-medium text-foreground hover:text-muted-foreground transition-colors py-1 w-full text-left">
+                    {cat.icon} {cat.name}
+                  </button>
+                ))}
+                <div className="border-t border-border my-1" />
+                {menuItems?.map(item => (
+                  item.is_external ? (
+                    <a key={item.id} href={item.url} target="_blank" rel="noopener noreferrer" className="block text-sm font-medium text-foreground hover:text-muted-foreground transition-colors py-1" onClick={() => setMobileOpen(false)}>
+                      {item.label}
+                    </a>
+                  ) : (
+                    <a key={item.id} href={item.url} className="block text-sm font-medium text-foreground hover:text-muted-foreground transition-colors py-1" onClick={() => setMobileOpen(false)}>
+                      {item.label}
+                    </a>
+                  )
+                ))}
+              </nav>
+            )}
+          </div>
+        </div>
+      ) : (
+      <>
       {/* Main header bar - WHITE */}
       <div className="bg-card border-b border-border">
         <div className="container py-3">
@@ -295,6 +374,8 @@ export function Header() {
           </div>
         </div>
       </div>
+      </>
+      )}
     </header>
   );
 }
