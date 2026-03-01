@@ -32,7 +32,7 @@ export function OfferCard({ offer }: OfferCardProps) {
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3 }}
         className="card-offer relative flex flex-col h-full cursor-pointer"
-        style={{ fontFamily: "'Montserrat', sans-serif" }}
+        style={{ fontFamily: "'Poppins', sans-serif" }}
       >
         {offer.discount && offer.discount > 0 && (
           <span className="badge-discount z-10">
@@ -57,7 +57,7 @@ export function OfferCard({ offer }: OfferCardProps) {
         </div>
         
         <div className="p-4 flex flex-col flex-grow">
-          <h3 className="font-normal text-sm line-clamp-2 mb-2 text-foreground">
+          <h3 className="font-normal text-base line-clamp-2 mb-2 text-foreground">
             {offer.name}
           </h3>
 
@@ -84,7 +84,7 @@ export function OfferCard({ offer }: OfferCardProps) {
               </p>
             )}
             
-            <span className="w-full mt-3 inline-flex items-center justify-center gap-2 text-sm whitespace-nowrap bg-foreground text-background font-semibold px-6 rounded-full transition-all duration-300 hover:opacity-90" style={{ height: '50px', borderRadius: '30px' }}>
+            <span className="w-full mt-3 inline-flex items-center justify-center gap-2 text-sm whitespace-nowrap font-semibold px-6 rounded-full transition-all duration-300 hover:opacity-90" style={{ height: '50px', borderRadius: '30px', backgroundColor: '#E3FF00', color: '#1a1a1a' }}>
               Ver oferta
               <ChevronRight className="w-4 h-4" />
             </span>
