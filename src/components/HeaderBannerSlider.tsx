@@ -14,7 +14,7 @@ export function HeaderBannerSlider() {
   if (!banners || banners.length === 0) return null;
 
   return (
-    <section className="w-full bg-muted">
+    <section className="w-full px-2.5 pt-2.5">
       <div className="max-w-[1365px] mx-auto">
         <Carousel
           opts={{ loop: true, align: 'center' }}
@@ -22,27 +22,35 @@ export function HeaderBannerSlider() {
           className="w-full"
         >
           <CarouselContent className="ml-0">
-            {banners.map((banner) => (
-              <CarouselItem key={banner.id} className="pl-0">
-                {banner.link ? (
-                  <a href={banner.link} target="_blank" rel="noopener noreferrer" className="block">
-                    <img
-                      src={banner.image_url}
-                      alt=""
-                      className="w-full h-[300px] object-cover"
-                      loading="lazy"
-                    />
-                  </a>
-                ) : (
+            {banners.map((banner) => {
+              const imgContent = (
+                <>
                   <img
                     src={banner.image_url}
                     alt=""
-                    className="w-full h-[300px] object-cover"
+                    className="hidden md:block w-full h-[300px] object-cover rounded-xl"
                     loading="lazy"
                   />
-                )}
-              </CarouselItem>
-            ))}
+                  <img
+                    src={banner.mobile_image_url || banner.image_url}
+                    alt=""
+                    className="block md:hidden w-full h-auto object-cover rounded-xl"
+                    loading="lazy"
+                  />
+                </>
+              );
+              return (
+                <CarouselItem key={banner.id} className="pl-0">
+                  {banner.link ? (
+                    <a href={banner.link} target="_blank" rel="noopener noreferrer" className="block">
+                      {imgContent}
+                    </a>
+                  ) : (
+                    imgContent
+                  )}
+                </CarouselItem>
+              );
+            })}
           </CarouselContent>
           {banners.length > 1 && (
             <>

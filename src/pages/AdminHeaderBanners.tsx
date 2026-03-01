@@ -17,6 +17,7 @@ export default function AdminHeaderBanners() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<HeaderBanner | null>(null);
   const [formImageUrl, setFormImageUrl] = useState('');
+  const [formMobileImageUrl, setFormMobileImageUrl] = useState('');
   const [formLink, setFormLink] = useState('');
   const [formOrder, setFormOrder] = useState(0);
   const [formActive, setFormActive] = useState(true);
@@ -25,6 +26,7 @@ export default function AdminHeaderBanners() {
 
   function resetForm() {
     setFormImageUrl('');
+    setFormMobileImageUrl('');
     setFormLink('');
     setFormOrder(banners?.length || 0);
     setFormActive(true);
@@ -40,6 +42,7 @@ export default function AdminHeaderBanners() {
   function openEdit(banner: HeaderBanner) {
     setEditing(banner);
     setFormImageUrl(banner.image_url || '');
+    setFormMobileImageUrl(banner.mobile_image_url || '');
     setFormLink(banner.link || '');
     setFormOrder(banner.display_order ?? 0);
     setFormActive(banner.active);
@@ -47,7 +50,7 @@ export default function AdminHeaderBanners() {
     setDialogOpen(true);
   }
 
-  async function handleImageUpload(file: File) {
+  async function handleImageUpload(file: File, target: 'desktop' | 'mobile') {
     setUploading(true);
     try {
       if (file.size > 2 * 1024 * 1024) {
@@ -55,11 +58,15 @@ export default function AdminHeaderBanners() {
         return;
       }
       const ext = file.name.split('.').pop();
-      const path = `header-banners/${Date.now()}.${ext}`;
+      const path = `header-banners/${Date.now()}-${target}.${ext}`;
       const { error } = await supabase.storage.from('site-assets').upload(path, file);
       if (error) throw error;
       const { data: { publicUrl } } = supabase.storage.from('site-assets').getPublicUrl(path);
-      setFormImageUrl(publicUrl);
+      if (target === 'mobile') {
+        setFormMobileImageUrl(publicUrl);
+      } else {
+        setFormImageUrl(publicUrl);
+      }
       toast.success('Imagem enviada!');
     } catch {
       toast.error('Erro ao enviar imagem');
@@ -77,6 +84,7 @@ export default function AdminHeaderBanners() {
     try {
       const payload = {
         image_url: formImageUrl,
+        mobile_image_url: formMobileImageUrl || null,
         link: formLink || null,
         display_order: formOrder,
         active: formActive,
@@ -155,7 +163,7 @@ export default function AdminHeaderBanners() {
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label>Imagem *</Label>
+              <Label>Imagem Desktop *</Label>
               <p className="text-xs text-muted-foreground mb-1">Recomendado: 1365×300px</p>
               {formImageUrl ? (
                 <div className="relative rounded-lg overflow-hidden border border-border">
@@ -169,10 +177,33 @@ export default function AdminHeaderBanners() {
                   {uploading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
                     <>
                       <Upload className="w-6 h-6 mb-1 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground">Clique para enviar</span>
+                      <span className="text-xs text-muted-foreground">Clique para enviar (Desktop)</span>
                     </>
                   )}
-                  <input type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && handleImageUpload(e.target.files[0])} />
+                  <input type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && handleImageUpload(e.target.files[0], 'desktop')} />
+                </label>
+              )}
+            </div>
+
+            <div>
+              <Label>Imagem Mobile</Label>
+              <p className="text-xs text-muted-foreground mb-1">Substitui o desktop no celular</p>
+              {formMobileImageUrl ? (
+                <div className="relative rounded-lg overflow-hidden border border-border">
+                  <img src={formMobileImageUrl} alt="" className="w-full h-32 object-contain bg-muted" />
+                  <button type="button" onClick={() => setFormMobileImageUrl('')} className="absolute top-2 right-2 bg-destructive text-destructive-foreground rounded-full p-1">
+                    <X className="w-3 h-3" />
+                  </button>
+                </div>
+              ) : (
+                <label className="flex flex-col items-center justify-center h-28 border-2 border-dashed border-border rounded-lg cursor-pointer hover:border-primary transition-colors">
+                  {uploading ? <Loader2 className="w-6 h-6 animate-spin" /> : (
+                    <>
+                      <Upload className="w-6 h-6 mb-1 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground">Clique para enviar (Mobile)</span>
+                    </>
+                  )}
+                  <input type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && handleImageUpload(e.target.files[0], 'mobile')} />
                 </label>
               )}
             </div>
