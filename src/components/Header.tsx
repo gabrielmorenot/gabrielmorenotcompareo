@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, Search, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Menu, X, Search, ChevronLeft, ChevronRight, AlignJustify } from 'lucide-react';
 import { useMenuItems } from '@/hooks/useMenuItems';
 import { useCategories } from '@/hooks/useCategories';
 import { useProductTypes } from '@/hooks/useProductTypes';
@@ -8,6 +8,7 @@ import { useSiteSettings } from '@/hooks/useSiteSettings';
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [catOpen, setCatOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const { data: menuItems } = useMenuItems();
   const { data: categories } = useCategories();
@@ -15,8 +16,20 @@ export function Header() {
   const { settings } = useSiteSettings();
   const navigate = useNavigate();
   const subNavRef = useRef<HTMLDivElement>(null);
+  const catRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+
+  // Close categories dropdown on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (catRef.current && !catRef.current.contains(e.target as Node)) {
+        setCatOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
 
   const checkScroll = () => {
     const el = subNavRef.current;
@@ -41,17 +54,15 @@ export function Header() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      // For now navigate to home with search - can be expanded later
-      navigate(`/?q=${encodeURIComponent(searchQuery.trim())}`);
+      navigate(`/busca?q=${encodeURIComponent(searchQuery.trim())}`);
     }
   };
 
-  // Build sub-nav links: mix of categories, fixed links, and product types
+  // Build sub-nav links: mix of fixed links and product types
   const subNavLinks = [
-    ...(categories?.slice(0, 4).map(c => ({ label: c.name, href: `/#categorias`, key: `cat-${c.id}` })) || []),
     { label: 'Oferta do Dia', href: '/#ofertas', key: 'ofertas' },
     { label: 'Cashback', href: '/#lojas', key: 'cashback' },
-    ...(productTypes?.slice(0, 4).map(pt => ({ label: pt.name, href: `/#tipos`, key: `pt-${pt.id}` })) || []),
+    ...(productTypes?.map(pt => ({ label: pt.name, href: `/#tipos`, key: `pt-${pt.id}` })) || []),
   ];
 
   return (
@@ -126,6 +137,14 @@ export function Header() {
         {/* Mobile menu */}
         {mobileOpen && (
           <nav className="md:hidden border-t border-primary-foreground/20 px-4 pb-4 pt-3 space-y-2">
+            {/* Mobile categories */}
+            <p className="text-xs font-bold text-primary-foreground/60 uppercase tracking-wider pt-1">Categorias</p>
+            {categories?.map(cat => (
+              <a key={cat.id} href="/#categorias" className="block text-sm font-medium text-primary-foreground/90 hover:text-primary-foreground transition-colors py-1" onClick={() => setMobileOpen(false)}>
+                {cat.icon} {cat.name}
+              </a>
+            ))}
+            <div className="border-t border-primary-foreground/20 my-2" />
             {menuItems?.map(item => (
               item.is_external ? (
                 <a key={item.id} href={item.url} target="_blank" rel="noopener noreferrer" className="block text-sm font-medium text-primary-foreground/90 hover:text-primary-foreground transition-colors py-1" onClick={() => setMobileOpen(false)}>
@@ -143,33 +162,64 @@ export function Header() {
 
       {/* Sub navigation bar */}
       <div className="bg-primary/90 border-t border-primary-foreground/10">
-        <div className="container relative">
-          {canScrollLeft && (
-            <button onClick={() => scroll('left')} className="absolute left-0 top-0 h-full z-10 px-1 bg-gradient-to-r from-primary/90 to-transparent text-primary-foreground">
-              <ChevronLeft className="w-4 h-4" />
+        <div className="container relative flex items-center">
+          {/* Categories hamburger button */}
+          <div ref={catRef} className="relative flex-shrink-0">
+            <button
+              onClick={() => setCatOpen(!catOpen)}
+              className="flex items-center gap-1.5 text-sm font-semibold text-primary-foreground py-2.5 pr-4 border-r border-primary-foreground/20 mr-4 hover:text-primary-foreground/80 transition-colors"
+            >
+              <AlignJustify className="w-4 h-4" />
+              <span className="hidden sm:inline">Categorias</span>
             </button>
-          )}
-          <div
-            ref={subNavRef}
-            onScroll={checkScroll}
-            className="flex items-center gap-6 overflow-x-auto scrollbar-hide py-2.5"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {subNavLinks.map(link => (
-              <a
-                key={link.key}
-                href={link.href}
-                className="text-sm font-medium text-primary-foreground/90 hover:text-primary-foreground whitespace-nowrap transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
+
+            {/* Categories dropdown */}
+            {catOpen && (
+              <div className="absolute top-full left-0 mt-1 w-56 bg-card rounded-lg border border-border shadow-lg z-50 py-2 animate-fade-in">
+                {categories?.map(cat => (
+                  <a
+                    key={cat.id}
+                    href="/#categorias"
+                    className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground hover:bg-secondary transition-colors"
+                    onClick={() => setCatOpen(false)}
+                  >
+                    <span>{cat.icon}</span>
+                    <span>{cat.name}</span>
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
-          {canScrollRight && (
-            <button onClick={() => scroll('right')} className="absolute right-0 top-0 h-full z-10 px-1 bg-gradient-to-l from-primary/90 to-transparent text-primary-foreground">
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          )}
+
+          {/* Scrollable links */}
+          <div className="relative flex-1 min-w-0">
+            {canScrollLeft && (
+              <button onClick={() => scroll('left')} className="absolute left-0 top-0 h-full z-10 px-1 bg-gradient-to-r from-primary/90 to-transparent text-primary-foreground">
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+            )}
+            <div
+              ref={subNavRef}
+              onScroll={checkScroll}
+              className="flex items-center gap-6 overflow-x-auto py-2.5"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {subNavLinks.map(link => (
+                <a
+                  key={link.key}
+                  href={link.href}
+                  className="text-sm font-medium text-primary-foreground/90 hover:text-primary-foreground whitespace-nowrap transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+            {canScrollRight && (
+              <button onClick={() => scroll('right')} className="absolute right-0 top-0 h-full z-10 px-1 bg-gradient-to-l from-primary/90 to-transparent text-primary-foreground">
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </header>
