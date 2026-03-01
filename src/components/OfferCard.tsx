@@ -89,7 +89,7 @@ export function OfferCard({ offer }: OfferCardProps) {
               Ver oferta
             </div>
             {/* Mobile text link */}
-            <p className="md:hidden mt-2 text-xs font-semibold" style={{ color: '#3DC042' }}>
+            <p className="md:hidden mt-2 text-xs font-normal text-foreground underline">
               Ver oferta
             </p>
           </div>
