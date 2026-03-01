@@ -84,10 +84,14 @@ export function OfferCard({ offer }: OfferCardProps) {
               </p>
             )}
             
-            <div className="w-full mt-3 h-[50px] min-h-[50px] flex items-center justify-center gap-2 text-sm whitespace-nowrap font-semibold px-6 transition-all duration-300 hover:opacity-90" style={{ borderRadius: '30px', backgroundColor: '#E3FF00', color: '#1a1a1a' }}>
+            {/* Desktop button */}
+            <div className="hidden md:flex w-full mt-3 h-[50px] min-h-[50px] items-center justify-center text-sm whitespace-nowrap font-semibold px-6 transition-all duration-300 hover:opacity-90" style={{ borderRadius: '30px', backgroundColor: '#E3FF00', color: '#1a1a1a' }}>
               Ver oferta
-              <ChevronRight className="w-4 h-4" />
             </div>
+            {/* Mobile text link */}
+            <p className="md:hidden mt-2 text-xs font-semibold" style={{ color: '#3DC042' }}>
+              Ver oferta
+            </p>
           </div>
         </div>
       </motion.article>
