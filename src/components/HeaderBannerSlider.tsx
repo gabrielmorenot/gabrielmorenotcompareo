@@ -28,7 +28,7 @@ export function HeaderBannerSlider() {
                     <img
                       src={banner.image_url}
                       alt=""
-                      className="w-full h-[300px] object-cover"
+                      className="w-full h-auto block"
                       loading="lazy"
                     />
                   </a>
@@ -36,7 +36,7 @@ export function HeaderBannerSlider() {
                   <img
                     src={banner.image_url}
                     alt=""
-                    className="w-full h-[300px] object-cover"
+                    className="w-full h-auto block"
                     loading="lazy"
                   />
                 )}
