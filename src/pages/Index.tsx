@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Header } from '@/components/Header';
+import { HeaderBannerSlider } from '@/components/HeaderBannerSlider';
 import { Footer } from '@/components/Footer';
 import { HeroSection } from '@/components/HeroSection';
 import { CategoryFilter } from '@/components/CategoryFilter';
@@ -64,6 +65,7 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
+      <HeaderBannerSlider />
       
       <main className="flex-grow">
         {/* 1. Ofertas do Dia */}
