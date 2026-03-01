@@ -12,6 +12,18 @@ export function OfferCard({ offer }: OfferCardProps) {
     ? offer.price / (1 - offer.discount / 100) 
     : null;
 
+  // Calculate max installments without interest (common BR e-commerce logic)
+  const getInstallments = (price: number) => {
+    if (price >= 600) return 12;
+    if (price >= 300) return 10;
+    if (price >= 100) return 6;
+    if (price >= 50) return 3;
+    return 1;
+  };
+
+  const installments = getInstallments(Number(offer.price));
+  const installmentValue = Number(offer.price) / installments;
+
   return (
     <Link to={`/produto/${offer.id}`}>
       <motion.article
@@ -20,6 +32,7 @@ export function OfferCard({ offer }: OfferCardProps) {
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3 }}
         className="card-offer relative flex flex-col h-full cursor-pointer"
+        style={{ fontFamily: "'Montserrat', sans-serif" }}
       >
         {offer.discount && offer.discount > 0 && (
           <span className="badge-discount z-10">
@@ -44,19 +57,19 @@ export function OfferCard({ offer }: OfferCardProps) {
         </div>
         
         <div className="p-4 flex flex-col flex-grow">
+          <h3 className="font-normal text-sm line-clamp-2 mb-2 text-foreground">
+            {offer.name}
+          </h3>
+
           {offer.stores && (
-            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">
-              {offer.stores.name}
+            <span className="text-xs text-muted-foreground mb-1">
+              Menor preço em <span className="font-semibold text-foreground">{offer.stores.name}</span>
             </span>
           )}
           
-          <h3 className="font-semibold text-sm line-clamp-2 mb-2 flex-grow">
-            {offer.name}
-          </h3>
-          
-          <div className="mt-auto">
+          <div className="mt-auto pt-2">
             {originalPrice && (
-              <span className="text-sm text-muted-foreground line-through block">
+              <span className="text-xs text-muted-foreground line-through block">
                 R$ {originalPrice.toFixed(2).replace('.', ',')}
               </span>
             )}
@@ -64,8 +77,14 @@ export function OfferCard({ offer }: OfferCardProps) {
             <p className="text-xl font-bold text-foreground">
               R$ {Number(offer.price).toFixed(2).replace('.', ',')}
             </p>
+
+            {installments > 1 && (
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Pague em até {installments}x de R$ {installmentValue.toFixed(2).replace('.', ',')} <span style={{ color: '#3DC042' }} className="font-semibold">sem juros</span>
+              </p>
+            )}
             
-            <span className="w-full mt-3 inline-flex items-center justify-center gap-2 text-sm whitespace-nowrap bg-foreground text-background font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:opacity-90">
+            <span className="w-full mt-3 inline-flex items-center justify-center gap-2 text-sm whitespace-nowrap bg-foreground text-background font-semibold px-6 rounded-full transition-all duration-300 hover:opacity-90" style={{ height: '50px', borderRadius: '30px' }}>
               Ver oferta
               <ChevronRight className="w-4 h-4" />
             </span>
