@@ -84,10 +84,10 @@ export function OfferCard({ offer }: OfferCardProps) {
               </p>
             )}
             
-            <span className="w-full mt-3 inline-flex items-center justify-center gap-2 text-sm whitespace-nowrap font-semibold px-6 rounded-full transition-all duration-300 hover:opacity-90" style={{ height: '50px', borderRadius: '30px', backgroundColor: '#E3FF00', color: '#1a1a1a' }}>
+            <div className="w-full mt-3 h-[50px] min-h-[50px] flex items-center justify-center gap-2 text-sm whitespace-nowrap font-semibold px-6 transition-all duration-300 hover:opacity-90" style={{ borderRadius: '30px', backgroundColor: '#E3FF00', color: '#1a1a1a' }}>
               Ver oferta
               <ChevronRight className="w-4 h-4" />
-            </span>
+            </div>
           </div>
         </div>
       </motion.article>
