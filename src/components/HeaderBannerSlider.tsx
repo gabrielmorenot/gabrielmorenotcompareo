@@ -14,13 +14,12 @@ export function HeaderBannerSlider() {
   if (!banners || banners.length === 0) return null;
 
   return (
-    <section className="w-full bg-muted">
-      <div className="max-w-[1365px] mx-auto">
-        <Carousel
-          opts={{ loop: true, align: 'center' }}
-          plugins={[autoplayPlugin]}
-          className="w-full"
-        >
+    <section className="w-full">
+      <Carousel
+        opts={{ loop: true, align: 'center' }}
+        plugins={[autoplayPlugin]}
+        className="w-full"
+      >
           <CarouselContent className="ml-0">
             {banners.map((banner) => (
               <CarouselItem key={banner.id} className="pl-0">
@@ -51,7 +50,6 @@ export function HeaderBannerSlider() {
             </>
           )}
         </Carousel>
-      </div>
     </section>
   );
 }
