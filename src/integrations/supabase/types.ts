@@ -95,6 +95,42 @@ export type Database = {
         }
         Relationships: []
       }
+      header_banners: {
+        Row: {
+          active: boolean
+          autoplay_interval: number | null
+          created_at: string
+          display_order: number | null
+          id: string
+          image_url: string
+          link: string | null
+          mobile_image_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          autoplay_interval?: number | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url: string
+          link?: string | null
+          mobile_image_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          autoplay_interval?: number | null
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string
+          link?: string | null
+          mobile_image_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       hero_promos: {
         Row: {
           active: boolean

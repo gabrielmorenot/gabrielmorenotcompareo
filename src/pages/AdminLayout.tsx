@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { Zap, Package, Image, Store, LogOut, Loader2, LayoutDashboard, Palette, FolderTree, MenuIcon, MessageSquare, Sparkles, Tags, Megaphone } from 'lucide-react';
+import { Zap, Package, Image, Store, LogOut, Loader2, LayoutDashboard, Palette, FolderTree, MenuIcon, MessageSquare, Sparkles, Tags, Megaphone, PanelTop } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
@@ -16,6 +16,7 @@ const navItems = [
   { to: '/admin/appearance', label: 'Aparência', icon: Palette },
   { to: '/admin/menu', label: 'Menu', icon: MenuIcon },
   { to: '/admin/popups', label: 'Popups', icon: MessageSquare },
+  { to: '/admin/header-banners', label: 'Banner Header', icon: PanelTop },
 ];
 
 export default function AdminLayout() {
