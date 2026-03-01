@@ -7,7 +7,7 @@ function BannerSlide({ banner }: { banner: Banner }) {
     <img
       src={banner.image_url!}
       alt=""
-      className="w-full h-full object-cover"
+      className="w-full h-auto object-contain"
       loading="lazy"
     />
   );
@@ -36,7 +36,7 @@ function MobileCarousel({ banners }: { banners: Banner[] }) {
   }, [next, banners.length]);
 
   return (
-    <div className="relative w-full rounded-2xl overflow-hidden" style={{ aspectRatio: '16/7' }}>
+    <div className="relative w-full rounded-2xl overflow-hidden">
       {banners.map((banner, i) => (
         <div
           key={banner.id}
@@ -92,7 +92,7 @@ export function BannerPairSection({ banners }: BannerPairSectionProps) {
       <div className="container">
         <div className="grid grid-cols-2 gap-6">
           {desktopBanners.map(banner => (
-            <div key={banner.id} className="rounded-2xl overflow-hidden" style={{ aspectRatio: '16/7' }}>
+            <div key={banner.id} className="rounded-2xl overflow-hidden">
               <BannerSlide banner={banner} />
             </div>
           ))}
