@@ -40,8 +40,7 @@ function MobileCarousel({ banners }: { banners: Banner[] }) {
       {banners.map((banner, i) => (
         <div
           key={banner.id}
-          className="absolute inset-0 transition-opacity duration-500"
-          style={{ opacity: i === current ? 1 : 0, pointerEvents: i === current ? 'auto' : 'none' }}
+          className={`w-full transition-opacity duration-500 ${i === current ? 'relative' : 'absolute inset-0 opacity-0 pointer-events-none'}`}
         >
           <BannerSlide banner={banner} />
         </div>
