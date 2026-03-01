@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { Zap, Package, Image, Store, LogOut, Loader2, LayoutDashboard, Palette, FolderTree, MenuIcon, MessageSquare, Sparkles, Tags } from 'lucide-react';
+import { Zap, Package, Image, Store, LogOut, Loader2, LayoutDashboard, Palette, FolderTree, MenuIcon, MessageSquare, Sparkles, Tags, Megaphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
   { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/admin/offers', label: 'Ofertas', icon: Package },
-  { to: '/admin/banners', label: 'Banners', icon: Image },
+  { to: '/admin/promo-banners', label: 'Promoções Destaque', icon: Megaphone },
+  { to: '/admin/banners', label: 'Banners Blog', icon: Image },
   { to: '/admin/hero-promos', label: 'Hero Promocional', icon: Sparkles },
   { to: '/admin/stores', label: 'Lojas', icon: Store },
   { to: '/admin/categories', label: 'Categorias', icon: FolderTree },

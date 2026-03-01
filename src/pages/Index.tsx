@@ -9,7 +9,7 @@ import { HeroPromoSection } from '@/components/HeroPromoSection';
 import { StoresSection } from '@/components/StoresSection';
 import { ProductTypesSection } from '@/components/ProductTypesSection';
 import { OfferCard } from '@/components/OfferCard';
-import { useOffers, useBanners } from '@/hooks/useData';
+import { useOffers, useBanners, usePromoBanners } from '@/hooks/useData';
 import { useCategories } from '@/hooks/useCategories';
 import { Loader2 } from 'lucide-react';
 
@@ -19,6 +19,7 @@ const Index = () => {
   const { data: dailyOffers, isLoading: loadingDaily } = useOffers(null);
   const { data: filteredOffers, isLoading: loadingFiltered } = useOffers(selectedCategory);
   const { data: banners } = useBanners();
+  const { data: promoBanners } = usePromoBanners();
   const { data: categories } = useCategories();
 
   // Auto-select the first category when categories load
@@ -57,9 +58,8 @@ const Index = () => {
     return dailyOffers.filter(o => o.name.toLowerCase().includes(selectedProductType.toLowerCase()));
   }, [selectedProductType, dailyOffers]);
 
-  // Split banners: first 3 for BannerSection, next 2 for BannerPairSection
-  const mainBanners = banners?.slice(0, 3) || [];
-  const pairBanners = banners?.slice(3, 5) || [];
+  // Blog banners for BannerPairSection
+  const blogBanners = banners || [];
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -174,7 +174,7 @@ const Index = () => {
         )}
 
         {/* 9. Banners em dupla */}
-        <BannerPairSection banners={pairBanners.length > 0 ? pairBanners : mainBanners} />
+        <BannerPairSection banners={blogBanners} />
 
         {/* 10. Resultado da terceira categoria */}
         {selectedCategory && thirdCategory && (
@@ -200,7 +200,7 @@ const Index = () => {
           </section>
         )}
 
-        <BannerSection banners={mainBanners} />
+        <BannerSection banners={promoBanners || []} />
       </main>
       
       <Footer />

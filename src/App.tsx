@@ -13,6 +13,7 @@ import AdminLayout from "./pages/AdminLayout";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminOffers from "./pages/AdminOffers";
 import AdminBanners from "./pages/AdminBanners";
+import AdminPromoBanners from "./pages/AdminPromoBanners";
 import AdminStores from "./pages/AdminStores";
 import AdminCategories from "./pages/AdminCategories";
 import AdminAppearance from "./pages/AdminAppearance";
@@ -43,6 +44,7 @@ const App = () => (
                 <Route path="dashboard" element={<AdminDashboard />} />
                 <Route path="offers" element={<AdminOffers />} />
                 <Route path="banners" element={<AdminBanners />} />
+                <Route path="promo-banners" element={<AdminPromoBanners />} />
                 <Route path="stores" element={<AdminStores />} />
                 <Route path="categories" element={<AdminCategories />} />
                 <Route path="product-types" element={<AdminProductTypes />} />
