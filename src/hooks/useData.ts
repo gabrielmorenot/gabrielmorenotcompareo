@@ -194,15 +194,16 @@ export function useDeleteStore() {
   });
 }
 
-// Banners
+// Banners - Blog section
 export function useBanners() {
   return useQuery({
-    queryKey: ['banners'],
+    queryKey: ['banners', 'blog'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('banners')
         .select('*')
         .eq('active', true)
+        .eq('section', 'blog')
         .order('display_order');
       if (error) throw error;
       return data as Banner[];
@@ -212,9 +213,37 @@ export function useBanners() {
 
 export function useAllBanners() {
   return useQuery({
-    queryKey: ['all-banners'],
+    queryKey: ['all-banners', 'blog'],
     queryFn: async () => {
-      const { data, error } = await supabase.from('banners').select('*').order('display_order');
+      const { data, error } = await supabase.from('banners').select('*').eq('section', 'blog').order('display_order');
+      if (error) throw error;
+      return data as Banner[];
+    },
+  });
+}
+
+// Banners - Promos section
+export function usePromoBanners() {
+  return useQuery({
+    queryKey: ['banners', 'promos'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('banners')
+        .select('*')
+        .eq('active', true)
+        .eq('section', 'promos')
+        .order('display_order');
+      if (error) throw error;
+      return data as Banner[];
+    },
+  });
+}
+
+export function useAllPromoBanners() {
+  return useQuery({
+    queryKey: ['all-banners', 'promos'],
+    queryFn: async () => {
+      const { data, error } = await supabase.from('banners').select('*').eq('section', 'promos').order('display_order');
       if (error) throw error;
       return data as Banner[];
     },
