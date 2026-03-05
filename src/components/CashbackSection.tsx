@@ -24,14 +24,24 @@ function StoreLogo({ name, logoUrl }: { name: string; logoUrl: string | null }) 
   );
 }
 
-function ProductCard({ name, imageUrl }: { name: string; imageUrl: string | null }) {
+const FALLBACK_PRODUCTS = [
+  { name: 'Smart TV', image: 'https://cdn.dummyjson.com/products/images/mobile-accessories/Samsung-Galaxy-Watch-Ultra/1.png' },
+  { name: 'Smartphone', image: 'https://cdn.dummyjson.com/products/images/smartphones/Samsung-Galaxy-S24/1.png' },
+  { name: 'Notebook', image: 'https://cdn.dummyjson.com/products/images/laptops/Apple-MacBook-Pro-14-Inch-Space-Grey/1.png' },
+];
+
+function ProductCard({ name, imageUrl, fallbackImage }: { name: string; imageUrl: string | null; fallbackImage?: string }) {
   return (
-    <div className="w-[140px] h-[140px] md:w-[180px] md:h-[180px] flex-shrink-0 rounded-2xl border border-white/30 bg-white/5 flex items-center justify-center overflow-hidden">
-      {imageUrl ? (
-        <img src={imageUrl} alt={name} className="w-full h-full object-contain p-3" />
-      ) : (
-        <span className="text-white/60 text-sm text-center px-2">{name}</span>
-      )}
+    <div className="w-[140px] h-[140px] md:w-[180px] md:h-[180px] flex-shrink-0 rounded-2xl border border-white/30 bg-white flex items-center justify-center overflow-hidden">
+      <img
+        src={imageUrl || fallbackImage || ''}
+        alt={name}
+        className="w-full h-full object-contain p-3"
+        onError={(e) => {
+          const el = e.target as HTMLImageElement;
+          if (fallbackImage && el.src !== fallbackImage) el.src = fallbackImage;
+        }}
+      />
     </div>
   );
 }
