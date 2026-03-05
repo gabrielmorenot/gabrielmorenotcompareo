@@ -133,7 +133,7 @@ export default function AdminStores() {
 
               <div><Label>Link da Loja</Label><Input value={form.link} onChange={e => setForm({ ...form, link: e.target.value })} /></div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
                   <Label>Cashback (%)</Label>
                   <Input type="number" min={0} max={100} value={form.cashback_percent} onChange={e => setForm({ ...form, cashback_percent: Number(e.target.value) })} />
@@ -141,6 +141,10 @@ export default function AdminStores() {
                 <div>
                   <Label>Texto do CTA</Label>
                   <Input value={form.cta_text} onChange={e => setForm({ ...form, cta_text: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Ordem</Label>
+                  <Input type="number" min={0} value={form.display_order} onChange={e => setForm({ ...form, display_order: Number(e.target.value) })} />
                 </div>
               </div>
 
