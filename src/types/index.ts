@@ -8,6 +8,7 @@ export interface Store {
   active: boolean;
   cashback_percent: number;
   cta_text: string | null;
+  display_order: number;
   created_at: string;
   updated_at: string;
 }
