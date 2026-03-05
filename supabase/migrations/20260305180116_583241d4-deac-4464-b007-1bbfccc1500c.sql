@@ -1,0 +1,15 @@
+UPDATE stores SET display_order = 1 WHERE name = 'Amazon';
+UPDATE stores SET display_order = 2 WHERE name = 'Mercado Livre';
+UPDATE stores SET display_order = 3 WHERE name = 'Americanas';
+UPDATE stores SET display_order = 4 WHERE name = 'Nike';
+UPDATE stores SET display_order = 5 WHERE name = 'Samsung';
+UPDATE stores SET display_order = 6 WHERE name = 'Shopee';
+UPDATE stores SET display_order = 7 WHERE name = 'Motorola';
+UPDATE stores SET display_order = 8 WHERE name = 'Temu';
+UPDATE stores SET display_order = 9 WHERE name = 'Submarino';
+UPDATE stores SET display_order = 10 WHERE name = 'AliExpress';
+UPDATE stores SET display_order = 11 WHERE name = 'Brastemp';
+UPDATE stores SET display_order = 12 WHERE name = 'Casas Bahia';
+UPDATE stores SET display_order = 13 WHERE name = 'Consul';
+UPDATE stores SET display_order = 14 WHERE name = 'Electrolux';
+UPDATE stores SET display_order = 15 WHERE name = 'Ponto';
