@@ -156,7 +156,7 @@ export default function AdminStores() {
             <div key={store.id} className="bg-card rounded-xl border border-border p-4 flex items-center gap-4">
               <div className="w-12 h-12 rounded-full bg-muted flex items-center justify-center overflow-hidden flex-shrink-0">
                 {store.logo_url ? (
-                  <img src={store.logo_url} alt={store.name} className="w-full h-full object-contain p-1" />
+                  <img src={store.logo_url} alt={store.name} className="w-full h-full object-cover" />
                 ) : (
                   <span className="font-bold text-muted-foreground">{store.name.charAt(0)}</span>
                 )}
