@@ -17,7 +17,7 @@ export default function AdminStores() {
   const deleteStore = useDeleteStore();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Store | null>(null);
-  const [form, setForm] = useState({ name: '', logo_url: '', link: '', active: true, cashback_percent: 0, cta_text: 'Resgatar cashback' });
+  const [form, setForm] = useState({ name: '', logo_url: '', link: '', active: true, cashback_percent: 0, cta_text: 'Resgatar cashback', display_order: 0 });
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
