@@ -66,7 +66,7 @@ export function CashbackSection() {
           <div className="hidden md:grid md:grid-cols-2 gap-8 items-center">
             {/* Left: Stores grid + CTA */}
             <div className="space-y-6">
-              <div className="flex flex-wrap gap-1">
+              <div className="grid grid-cols-4 gap-1 w-fit">
                 {displayStores.map((store) => (
                   <a
                     key={store.id}
@@ -79,6 +79,9 @@ export function CashbackSection() {
                   </a>
                 ))}
               </div>
+              <a href="#lojas-parceiras" className="text-white/60 text-sm hover:text-white transition-colors underline underline-offset-2">
+                + mais lojas
+              </a>
 
               {/* CTA Button */}
               <a
