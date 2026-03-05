@@ -7,6 +7,7 @@ import { CategoryFilter } from '@/components/CategoryFilter';
 import { BannerSection } from '@/components/BannerSection';
 import { BannerPairSection } from '@/components/BannerPairSection';
 import { HeroPromoSection } from '@/components/HeroPromoSection';
+import { CashbackSection } from '@/components/CashbackSection';
 import { StoresSection } from '@/components/StoresSection';
 import { ProductTypesSection } from '@/components/ProductTypesSection';
 import { OfferCard } from '@/components/OfferCard';
@@ -203,6 +204,9 @@ const Index = () => {
         )}
 
         <BannerSection banners={promoBanners || []} />
+
+        {/* Seção Cashback */}
+        <CashbackSection />
       </main>
       
       <Footer />

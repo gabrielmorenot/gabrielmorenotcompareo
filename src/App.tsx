@@ -22,6 +22,7 @@ import AdminPopups from "./pages/AdminPopups";
 import AdminHeroPromos from "./pages/AdminHeroPromos";
 import AdminProductTypes from "./pages/AdminProductTypes";
 import AdminHeaderBanners from "./pages/AdminHeaderBanners";
+import AdminCashbackSection from "./pages/AdminCashbackSection";
 import { PopupDisplay } from "./components/PopupDisplay";
 import NotFound from "./pages/NotFound";
 
@@ -54,6 +55,7 @@ const App = () => (
                 <Route path="popups" element={<AdminPopups />} />
                 <Route path="hero-promos" element={<AdminHeroPromos />} />
                 <Route path="header-banners" element={<AdminHeaderBanners />} />
+                <Route path="cashback-section" element={<AdminCashbackSection />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
