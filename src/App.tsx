@@ -22,6 +22,7 @@ import AdminPopups from "./pages/AdminPopups";
 import AdminHeroPromos from "./pages/AdminHeroPromos";
 import AdminProductTypes from "./pages/AdminProductTypes";
 import AdminHeaderBanners from "./pages/AdminHeaderBanners";
+import AdminCashbackSection from "./pages/AdminCashbackSection";
 import { PopupDisplay } from "./components/PopupDisplay";
 import NotFound from "./pages/NotFound";
 
