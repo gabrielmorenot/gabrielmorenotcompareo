@@ -22,7 +22,7 @@ export default function AdminStores() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function resetForm() {
-    setForm({ name: '', logo_url: '', link: '', active: true, cashback_percent: 0, cta_text: 'Resgatar cashback' });
+    setForm({ name: '', logo_url: '', link: '', active: true, cashback_percent: 0, cta_text: 'Resgatar cashback', display_order: 0 });
     setEditing(null);
   }
 
