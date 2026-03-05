@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 
 function StoreLogo({ name, logoUrl }: { name: string; logoUrl: string | null }) {
   return (
-    <div className="w-[60px] h-[60px] md:w-[90px] md:h-[90px] rounded-xl border border-white/20 bg-white/10 flex items-center justify-center overflow-hidden">
+    <div className="w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-xl border border-white/20 bg-white/10 flex items-center justify-center overflow-hidden">
       {!logoUrl ? (
         <span className="text-lg font-bold text-white/60">{name.charAt(0)}</span>
       ) : (
@@ -54,7 +54,7 @@ export function CashbackSection() {
 
   if (!config || !config.active) return null;
 
-  const displayStores = (stores || []).slice(0, 8);
+  const displayStores = (stores || []).slice(0, 9);
   const displayProducts = (offers || []).slice(0, 3);
 
   return (
@@ -66,7 +66,7 @@ export function CashbackSection() {
           <div className="hidden md:grid md:grid-cols-2 gap-8 items-center">
             {/* Left: Stores grid + CTA */}
             <div className="space-y-6">
-              <div className="grid grid-cols-4 gap-1 w-fit">
+              <div className="grid grid-cols-5 gap-2 w-fit">
                 {displayStores.map((store) => (
                   <a
                     key={store.id}
@@ -78,10 +78,16 @@ export function CashbackSection() {
                     <StoreLogo name={store.name} logoUrl={store.logo_url} />
                   </a>
                 ))}
+                {/* + icon as last item */}
+                <a
+                  href="#lojas-parceiras"
+                  className="flex items-center justify-center hover:scale-105 transition-transform"
+                >
+                  <div className="w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-xl flex items-center justify-center" style={{ backgroundColor: '#E3FF00' }}>
+                    <span className="text-2xl md:text-4xl font-bold" style={{ color: '#191919' }}>+</span>
+                  </div>
+                </a>
               </div>
-              <a href="#lojas-parceiras" className="text-white/60 text-sm hover:text-white transition-colors underline underline-offset-2">
-                + mais lojas
-              </a>
 
               {/* CTA Button */}
               <a
