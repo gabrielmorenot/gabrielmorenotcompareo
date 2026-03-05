@@ -35,7 +35,7 @@ export default function AdminStores() {
       active: store.active,
       cashback_percent: store.cashback_percent || 0,
       cta_text: store.cta_text || 'Resgatar cashback',
-      display_order: (store as any).display_order || 0,
+      display_order: store.display_order || 0,
     });
     setOpen(true);
   }
