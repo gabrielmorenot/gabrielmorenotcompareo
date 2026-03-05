@@ -79,7 +79,7 @@ export function CashbackSection() {
                   </a>
                 ))}
               </div>
-              <a href="#lojas" className="text-white/60 text-sm hover:text-white transition-colors underline underline-offset-2">
+              <a href="#lojas-parceiras" className="text-white/60 text-sm hover:text-white transition-colors underline underline-offset-2">
                 + mais lojas
               </a>
 

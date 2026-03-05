@@ -53,7 +53,7 @@ export function StoresSection() {
   if (!stores || stores.length === 0) return null;
 
   return (
-    <section className="py-10 bg-background">
+    <section id="lojas-parceiras" className="py-10 bg-background">
       <div className="container">
         <h2 className="section-title mb-6">Compare e compre nas lojas mais confiáveis!</h2>
 
