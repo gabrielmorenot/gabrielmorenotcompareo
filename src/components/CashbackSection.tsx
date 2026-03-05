@@ -132,9 +132,9 @@ export function CashbackSection() {
                 className="flex gap-3 overflow-x-auto pb-2"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
-                {displayProducts.map((offer) => (
+                {displayProducts.map((offer, i) => (
                   <a key={offer.id} href={offer.affiliate_link} target="_blank" rel="noopener noreferrer">
-                    <ProductCard name={offer.name} imageUrl={offer.image_url} />
+                    <ProductCard name={offer.name} imageUrl={offer.image_url} fallbackImage={FALLBACK_PRODUCTS[i % FALLBACK_PRODUCTS.length].image} />
                   </a>
                 ))}
               </div>
