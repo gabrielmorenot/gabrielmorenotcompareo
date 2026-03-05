@@ -14,7 +14,7 @@ function Storelogo({ name, logoUrl }: { name: string; logoUrl: string | null }) 
         <img
           src={logoUrl}
           alt={name}
-          className="w-full h-full object-contain p-2"
+          className="w-full h-full object-cover"
           onError={() => setFailed(true)}
         />
       )}
