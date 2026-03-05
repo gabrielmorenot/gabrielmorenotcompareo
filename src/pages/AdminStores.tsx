@@ -95,7 +95,7 @@ export default function AdminStores() {
                 {form.logo_url ? (
                   <div className="flex items-center gap-3">
                     <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center overflow-hidden border">
-                      <img src={form.logo_url} alt="Logo" className="w-full h-full object-contain p-1" />
+                      <img src={form.logo_url} alt="Logo" className="w-full h-full object-cover" />
                     </div>
                     <Button type="button" variant="ghost" size="sm" onClick={() => setForm({ ...form, logo_url: '' })}>
                       <X className="w-4 h-4 mr-1" /> Remover

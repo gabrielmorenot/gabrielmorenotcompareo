@@ -13,7 +13,7 @@ function StoreLogo({ name, logoUrl }: { name: string; logoUrl: string | null }) 
         <img
           src={logoUrl}
           alt={name}
-          className="w-full h-full object-contain p-1.5"
+          className="w-full h-full object-cover"
           onError={(e) => {
             (e.target as HTMLImageElement).style.display = 'none';
             (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
