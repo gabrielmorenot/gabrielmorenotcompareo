@@ -58,7 +58,7 @@ export function CashbackSection() {
   const displayProducts = (offers || []).slice(0, 3);
 
   return (
-    <section className="py-6 md:py-10 bg-background">
+    <section className="py-6 md:py-10 bg-background font-[Poppins]">
       <div className="container">
         <div className="rounded-2xl p-6 md:p-10" style={{ backgroundColor: '#191919' }}>
 
@@ -66,7 +66,7 @@ export function CashbackSection() {
           <div className="hidden md:grid md:grid-cols-2 gap-8 items-center">
             {/* Left: Stores grid + CTA */}
             <div className="space-y-6">
-              <div className="grid grid-cols-4 gap-3">
+              <div className="grid grid-cols-4 gap-2">
                 {displayStores.map((store) => (
                   <a
                     key={store.id}
