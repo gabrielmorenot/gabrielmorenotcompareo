@@ -66,7 +66,7 @@ export function CashbackSection() {
           <div className="hidden md:grid md:grid-cols-2 gap-8 items-center">
             {/* Left: Stores grid + CTA */}
             <div className="space-y-6">
-              <div className="grid grid-cols-4 gap-1">
+              <div className="flex flex-wrap gap-1">
                 {displayStores.map((store) => (
                   <a
                     key={store.id}
