@@ -64,7 +64,7 @@ export default function AdminStores() {
         await updateStore.mutateAsync({ id: editing.id, ...form, cashback_percent: Number(form.cashback_percent), display_order: Number(form.display_order) });
         toast.success('Loja atualizada!');
       } else {
-        await createStore.mutateAsync({ ...form, cashback_percent: Number(form.cashback_percent) } as any);
+        await createStore.mutateAsync({ ...form, cashback_percent: Number(form.cashback_percent), display_order: Number(form.display_order) } as any);
         toast.success('Loja criada!');
       }
       setOpen(false);
