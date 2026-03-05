@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Outlet, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { Zap, Package, Image, Store, LogOut, Loader2, LayoutDashboard, Palette, FolderTree, MenuIcon, MessageSquare, Sparkles, Tags, Megaphone, PanelTop } from 'lucide-react';
+import { Zap, Package, Image, Store, LogOut, Loader2, LayoutDashboard, Palette, FolderTree, MenuIcon, MessageSquare, Sparkles, Tags, Megaphone, PanelTop, BadgeDollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
