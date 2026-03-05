@@ -59,6 +59,42 @@ export type Database = {
         }
         Relationships: []
       }
+      cashback_section: {
+        Row: {
+          active: boolean
+          badge_text: string | null
+          created_at: string
+          cta_link: string | null
+          cta_text: string
+          id: string
+          subtitle: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          badge_text?: string | null
+          created_at?: string
+          cta_link?: string | null
+          cta_text?: string
+          id?: string
+          subtitle?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          badge_text?: string | null
+          created_at?: string
+          cta_link?: string | null
+          cta_text?: string
+          id?: string
+          subtitle?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           active: boolean
