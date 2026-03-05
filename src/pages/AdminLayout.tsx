@@ -17,6 +17,7 @@ const navItems = [
   { to: '/admin/menu', label: 'Menu', icon: MenuIcon },
   { to: '/admin/popups', label: 'Popups', icon: MessageSquare },
   { to: '/admin/header-banners', label: 'Banner Header', icon: PanelTop },
+  { to: '/admin/cashback-section', label: 'Seção Cashback', icon: BadgeDollarSign },
 ];
 
 export default function AdminLayout() {

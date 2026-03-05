@@ -55,6 +55,7 @@ const App = () => (
                 <Route path="popups" element={<AdminPopups />} />
                 <Route path="hero-promos" element={<AdminHeroPromos />} />
                 <Route path="header-banners" element={<AdminHeaderBanners />} />
+                <Route path="cashback-section" element={<AdminCashbackSection />} />
               </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>

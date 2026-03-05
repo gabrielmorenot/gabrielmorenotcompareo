@@ -204,6 +204,9 @@ const Index = () => {
         )}
 
         <BannerSection banners={promoBanners || []} />
+
+        {/* Seção Cashback */}
+        <CashbackSection />
       </main>
       
       <Footer />
