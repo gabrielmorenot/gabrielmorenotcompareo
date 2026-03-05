@@ -54,7 +54,7 @@ export function CashbackSection() {
 
   if (!config || !config.active) return null;
 
-  const displayStores = (stores || []).slice(0, 8);
+  const displayStores = (stores || []).slice(0, 9);
   const displayProducts = (offers || []).slice(0, 3);
 
   return (
