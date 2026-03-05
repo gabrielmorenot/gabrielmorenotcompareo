@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 
 function StoreLogo({ name, logoUrl }: { name: string; logoUrl: string | null }) {
   return (
-    <div className="w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-2xl border border-white/20 bg-white/10 flex items-center justify-center overflow-hidden">
+    <div className="w-[72px] h-[72px] md:w-[100px] md:h-[100px] rounded-2xl border border-white/20 bg-white/10 flex items-center justify-center overflow-hidden">
       {!logoUrl ? (
         <span className="text-lg font-bold text-white/60">{name.charAt(0)}</span>
       ) : (
@@ -83,7 +83,7 @@ export function CashbackSection() {
                   href="#lojas-parceiras"
                   className="flex items-center justify-center hover:scale-105 transition-transform"
                 >
-                  <div className="w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-2xl flex items-center justify-center" style={{ backgroundColor: '#E3FF00' }}>
+                  <div className="w-[72px] h-[72px] md:w-[100px] md:h-[100px] rounded-2xl flex items-center justify-center" style={{ backgroundColor: '#E3FF00' }}>
                     <span className="text-2xl md:text-4xl font-bold" style={{ color: '#191919' }}>+</span>
                   </div>
                 </a>
@@ -159,15 +159,15 @@ export function CashbackSection() {
               rel="noopener noreferrer"
               className="flex items-center justify-between rounded-full border border-[#E3FF00] px-5 py-2.5 hover:bg-[#E3FF00]/10 transition-colors"
             >
-              <span className="text-white text-xs font-medium">{config.cta_text}</span>
+              <span className="text-white text-[10px] font-medium whitespace-nowrap">{config.cta_text}</span>
               <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E3FF00' }}>
                 <ArrowRight className="w-4 h-4" style={{ color: '#191919' }} />
               </div>
             </a>
 
-            {/* Stores grid */}
-            <div className="grid grid-cols-4 gap-2.5">
-              {displayStores.map((store) => (
+            {/* Stores grid - 2 rows of 4 (7 stores + plus icon) */}
+            <div className="grid grid-cols-4 gap-1.5">
+              {(stores || []).slice(0, 7).map((store) => (
                 <a
                   key={store.id}
                   href={store.link || '#'}
@@ -178,6 +178,15 @@ export function CashbackSection() {
                   <StoreLogo name={store.name} logoUrl={store.logo_url} />
                 </a>
               ))}
+              {/* + icon */}
+              <a
+                href="#lojas-parceiras"
+                className="flex items-center justify-center"
+              >
+                <div className="w-[72px] h-[72px] rounded-2xl flex items-center justify-center" style={{ backgroundColor: '#E3FF00' }}>
+                  <span className="text-2xl font-bold" style={{ color: '#191919' }}>+</span>
+                </div>
+              </a>
             </div>
 
             {config.badge_text && (
