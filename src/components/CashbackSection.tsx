@@ -110,7 +110,7 @@ export function CashbackSection() {
               </div>
 
               {config.badge_text && (
-                <span className="inline-block rounded-full border border-white/30 px-4 py-1.5 text-white text-xs font-medium">
+                <span className="inline-block rounded-full px-4 py-1.5 text-white text-xs font-medium" style={{ border: '1px solid #E3FF00' }}>
                   {config.badge_text}
                 </span>
               )}
