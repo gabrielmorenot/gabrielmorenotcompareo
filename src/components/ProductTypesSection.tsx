@@ -49,17 +49,19 @@ export function ProductTypesSection({ selected, onSelect }: ProductTypesSectionP
                       : 'border-border bg-card hover:border-primary/50 hover:shadow-md'
                   }`}
                 >
-                  <div className="absolute w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-full bg-primary/90" />
                   {type.image_url ? (
                     <img
                       src={type.image_url}
                       alt={type.name}
-                      className="relative z-10 w-[70px] h-[70px] md:w-[110px] md:h-[110px] object-contain drop-shadow-lg"
+                      className="absolute inset-0 w-full h-full object-cover"
                     />
                   ) : (
-                    <span className="relative z-10 text-3xl md:text-6xl drop-shadow-lg">
-                      {type.emoji}
-                    </span>
+                    <>
+                      <div className="absolute w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-full bg-primary/90" />
+                      <span className="relative z-10 text-3xl md:text-6xl drop-shadow-lg">
+                        {type.emoji}
+                      </span>
+                    </>
                   )}
                 </div>
 
