@@ -6,7 +6,7 @@ import { ArrowRight } from 'lucide-react';
 
 function StoreLogo({ name, logoUrl }: { name: string; logoUrl: string | null }) {
   return (
-    <div className="w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-xl border border-white/20 bg-white/10 flex items-center justify-center overflow-hidden">
+    <div className="w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-2xl border border-white/20 bg-white/10 flex items-center justify-center overflow-hidden">
       {!logoUrl ? (
         <span className="text-lg font-bold text-white/60">{name.charAt(0)}</span>
       ) : (
@@ -83,7 +83,7 @@ export function CashbackSection() {
                   href="#lojas-parceiras"
                   className="flex items-center justify-center hover:scale-105 transition-transform"
                 >
-                  <div className="w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-xl flex items-center justify-center" style={{ backgroundColor: '#E3FF00' }}>
+                  <div className="w-[60px] h-[60px] md:w-[100px] md:h-[100px] rounded-2xl flex items-center justify-center" style={{ backgroundColor: '#E3FF00' }}>
                     <span className="text-2xl md:text-4xl font-bold" style={{ color: '#191919' }}>+</span>
                   </div>
                 </a>
