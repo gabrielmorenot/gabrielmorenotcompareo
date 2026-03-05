@@ -102,9 +102,9 @@ export function CashbackSection() {
               </div>
 
               <div className="flex gap-4">
-                {displayProducts.map((offer) => (
+                {displayProducts.map((offer, i) => (
                   <a key={offer.id} href={offer.affiliate_link} target="_blank" rel="noopener noreferrer">
-                    <ProductCard name={offer.name} imageUrl={offer.image_url} />
+                    <ProductCard name={offer.name} imageUrl={offer.image_url} fallbackImage={FALLBACK_PRODUCTS[i % FALLBACK_PRODUCTS.length].image} />
                   </a>
                 ))}
               </div>
