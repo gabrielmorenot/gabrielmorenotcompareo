@@ -419,6 +419,7 @@ export type Database = {
           cashback_percent: number | null
           created_at: string
           cta_text: string | null
+          display_order: number | null
           id: string
           link: string | null
           logo_url: string | null
@@ -430,6 +431,7 @@ export type Database = {
           cashback_percent?: number | null
           created_at?: string
           cta_text?: string | null
+          display_order?: number | null
           id?: string
           link?: string | null
           logo_url?: string | null
@@ -441,6 +443,7 @@ export type Database = {
           cashback_percent?: number | null
           created_at?: string
           cta_text?: string | null
+          display_order?: number | null
           id?: string
           link?: string | null
           logo_url?: string | null

@@ -132,7 +132,7 @@ export function useStores() {
   return useQuery({
     queryKey: ['stores'],
     queryFn: async () => {
-      const { data, error } = await supabase.from('stores').select('*').eq('active', true).order('name');
+      const { data, error } = await supabase.from('stores').select('*').eq('active', true).order('display_order', { ascending: true }).order('name');
       if (error) throw error;
       return data as Store[];
     },
@@ -143,7 +143,7 @@ export function useAllStores() {
   return useQuery({
     queryKey: ['all-stores'],
     queryFn: async () => {
-      const { data, error } = await supabase.from('stores').select('*').order('name');
+      const { data, error } = await supabase.from('stores').select('*').order('display_order', { ascending: true }).order('name');
       if (error) throw error;
       return data as Store[];
     },

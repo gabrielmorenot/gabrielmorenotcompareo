@@ -17,12 +17,12 @@ export default function AdminStores() {
   const deleteStore = useDeleteStore();
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<Store | null>(null);
-  const [form, setForm] = useState({ name: '', logo_url: '', link: '', active: true, cashback_percent: 0, cta_text: 'Resgatar cashback' });
+  const [form, setForm] = useState({ name: '', logo_url: '', link: '', active: true, cashback_percent: 0, cta_text: 'Resgatar cashback', display_order: 0 });
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function resetForm() {
-    setForm({ name: '', logo_url: '', link: '', active: true, cashback_percent: 0, cta_text: 'Resgatar cashback' });
+    setForm({ name: '', logo_url: '', link: '', active: true, cashback_percent: 0, cta_text: 'Resgatar cashback', display_order: 0 });
     setEditing(null);
   }
 
@@ -35,6 +35,7 @@ export default function AdminStores() {
       active: store.active,
       cashback_percent: store.cashback_percent || 0,
       cta_text: store.cta_text || 'Resgatar cashback',
+      display_order: store.display_order || 0,
     });
     setOpen(true);
   }
@@ -60,10 +61,10 @@ export default function AdminStores() {
     e.preventDefault();
     try {
       if (editing) {
-        await updateStore.mutateAsync({ id: editing.id, ...form, cashback_percent: Number(form.cashback_percent) });
+        await updateStore.mutateAsync({ id: editing.id, ...form, cashback_percent: Number(form.cashback_percent), display_order: Number(form.display_order) });
         toast.success('Loja atualizada!');
       } else {
-        await createStore.mutateAsync({ ...form, cashback_percent: Number(form.cashback_percent) } as any);
+        await createStore.mutateAsync({ ...form, cashback_percent: Number(form.cashback_percent), display_order: Number(form.display_order) } as any);
         toast.success('Loja criada!');
       }
       setOpen(false);
@@ -132,7 +133,7 @@ export default function AdminStores() {
 
               <div><Label>Link da Loja</Label><Input value={form.link} onChange={e => setForm({ ...form, link: e.target.value })} /></div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
                   <Label>Cashback (%)</Label>
                   <Input type="number" min={0} max={100} value={form.cashback_percent} onChange={e => setForm({ ...form, cashback_percent: Number(e.target.value) })} />
@@ -140,6 +141,10 @@ export default function AdminStores() {
                 <div>
                   <Label>Texto do CTA</Label>
                   <Input value={form.cta_text} onChange={e => setForm({ ...form, cta_text: e.target.value })} />
+                </div>
+                <div>
+                  <Label>Ordem</Label>
+                  <Input type="number" min={0} value={form.display_order} onChange={e => setForm({ ...form, display_order: Number(e.target.value) })} />
                 </div>
               </div>
 
