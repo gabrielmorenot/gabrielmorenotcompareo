@@ -131,7 +131,7 @@ export function CashbackSection() {
             {/* Text */}
             <div>
               <p className="text-white/70 text-xs mb-1">{config.subtitle}</p>
-              <h2 className="text-white text-2xl font-bold leading-tight">{config.title}</h2>
+              <h2 className="text-white text-2xl font-semibold leading-tight">{config.title}</h2>
             </div>
 
             {/* Products - horizontal scroll with fade */}
