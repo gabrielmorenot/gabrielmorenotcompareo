@@ -152,17 +152,13 @@ export function CashbackSection() {
                 style={{ background: 'linear-gradient(to left, #191919, transparent)' }} />
             </div>
 
-            {/* CTA Button */}
+            {/* CTA Text */}
             <a
               href={config.cta_link || '#'}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between rounded-full border border-[#E3FF00] px-5 py-2.5 hover:bg-[#E3FF00]/10 transition-colors"
             >
               <span className="text-white text-[10px] font-medium whitespace-nowrap">{config.cta_text}</span>
-              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#E3FF00' }}>
-                <ArrowRight className="w-4 h-4" style={{ color: '#191919' }} />
-              </div>
             </a>
 
             {/* Stores grid - 2 rows of 4 (7 stores + plus icon) */}
