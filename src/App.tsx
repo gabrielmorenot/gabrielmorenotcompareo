@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { SiteSettingsProvider } from "@/hooks/useSiteSettings";
 import Index from "./pages/Index";
+import StorePage from "./pages/StorePage";
 import SearchResults from "./pages/SearchResults";
 import ProductPage from "./pages/ProductPage";
 import AdminLogin from "./pages/AdminLogin";
@@ -40,6 +41,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/busca" element={<SearchResults />} />
+              <Route path="/loja/:id" element={<StorePage />} />
               <Route path="/produto/:id" element={<ProductPage />} />
               <Route path="/admin" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminLayout />}>

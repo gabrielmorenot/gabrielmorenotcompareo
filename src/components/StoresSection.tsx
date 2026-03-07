@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { useStores } from '@/hooks/useData';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 
@@ -73,11 +74,9 @@ export function StoresSection() {
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {stores.map((store) => (
-              <a
+              <Link
                 key={store.id}
-                href={store.link || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
+                to={`/loja/${store.id}`}
                 className="snap-start flex-shrink-0 w-[130px] md:w-[150px] rounded-2xl border-2 border-border bg-card hover:border-primary/50 hover:shadow-md transition-all duration-300 p-4 flex flex-col items-center gap-2 group"
               >
                 {/* Logo circle */}
@@ -99,7 +98,7 @@ export function StoresSection() {
                     </span>
                   )}
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
 
