@@ -69,15 +69,13 @@ export function CashbackSection() {
             <div className="space-y-6">
               <div className="grid grid-cols-5 gap-2 w-fit">
                 {displayStores.map((store) => (
-                  <a
+                  <Link
                     key={store.id}
-                    href={store.link || '#'}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    to={`/loja/${store.id}`}
                     className="flex items-center justify-center hover:scale-105 transition-transform"
                   >
                     <StoreLogo name={store.name} logoUrl={store.logo_url} />
-                  </a>
+                  </Link>
                 ))}
                 {/* + icon as last item */}
                 <a
