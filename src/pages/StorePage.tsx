@@ -5,7 +5,7 @@ import { useCategories } from '@/hooks/useCategories';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { OfferCard } from '@/components/OfferCard';
-import { ArrowRight, ChevronLeft } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronDown } from 'lucide-react';
 import { CATEGORIES } from '@/types';
 
 export default function StorePage() {
