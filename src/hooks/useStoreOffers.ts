@@ -45,3 +45,32 @@ export function useStoreOffers(storeId: string, categoryFilter?: string | null) 
     enabled: !!storeId,
   });
 }
+
+export function useSuggestedOffers(storeId: string, categoryFilter?: string | null) {
+  return useQuery({
+    queryKey: ['suggested-offers', storeId, categoryFilter],
+    queryFn: async () => {
+      let query = supabase
+        .from('offers')
+        .select('*, stores(*)')
+        .eq('active', true)
+        .neq('store_id', storeId)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (categoryFilter) {
+        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(categoryFilter);
+        if (isUuid) {
+          query = query.eq('category_id', categoryFilter);
+        } else {
+          query = query.eq('category', categoryFilter as any);
+        }
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+      return data as Offer[];
+    },
+    enabled: !!storeId,
+  });
+}

@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useStore, useStoreOffers } from '@/hooks/useStoreOffers';
+import { useStore, useStoreOffers, useSuggestedOffers } from '@/hooks/useStoreOffers';
 import { useCategories } from '@/hooks/useCategories';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { OfferCard } from '@/components/OfferCard';
-import { ArrowRight, ChevronLeft, ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronDown, Loader2 } from 'lucide-react';
 import { CATEGORIES } from '@/types';
+import { useMemo } from 'react';
 
 export default function StorePage() {
   const { id } = useParams<{ id: string }>();
