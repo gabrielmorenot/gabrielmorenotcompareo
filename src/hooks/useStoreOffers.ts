@@ -34,7 +34,7 @@ export function useStoreOffers(storeId: string, categoryFilter?: string | null) 
         if (isUuid) {
           query = query.eq('category_id', categoryFilter);
         } else {
-          query = query.eq('category', categoryFilter);
+          query = query.eq('category', categoryFilter as any);
         }
       }
 
