@@ -5,7 +5,7 @@ import { useCategories } from '@/hooks/useCategories';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { OfferCard } from '@/components/OfferCard';
-import { ArrowRight, ChevronLeft } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronDown } from 'lucide-react';
 import { CATEGORIES } from '@/types';
 
 export default function StorePage() {
@@ -94,11 +94,11 @@ export default function StorePage() {
           </div>
 
           {/* Category Filter */}
-          <div className="mt-6">
+          <div className="mt-6 relative inline-block">
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-4 py-2.5 rounded-lg border text-sm font-medium bg-transparent text-white appearance-none cursor-pointer min-w-[200px]"
+              className="px-4 py-2.5 pr-10 rounded-lg border text-sm font-medium bg-transparent text-white appearance-none cursor-pointer min-w-[200px]"
               style={{ borderColor: '#E3FF00' }}
             >
               <option value="" className="bg-[#191919] text-white">Todas as categorias</option>
@@ -108,6 +108,7 @@ export default function StorePage() {
                 </option>
               ))}
             </select>
+            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white pointer-events-none" />
           </div>
         </div>
       </section>
