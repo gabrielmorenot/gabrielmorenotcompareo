@@ -15,6 +15,17 @@ export default function StorePage() {
   const { data: categories } = useCategories();
   const [categoryFilter, setCategoryFilter] = useState<string>('');
   const { data: offers, isLoading: offersLoading } = useStoreOffers(id || '', categoryFilter || null);
+  const { data: suggestedOffers, isLoading: suggestedLoading } = useSuggestedOffers(id || '', categoryFilter || null);
+
+  // Split offers: first 10 (2 rows), rest goes after suggested section
+  const firstRowOffers = useMemo(() => offers?.slice(0, 10) || [], [offers]);
+  const remainingOffers = useMemo(() => offers?.slice(10) || [], [offers]);
+
+  const selectedLabel = categoryFilter
+    ? (categories && categories.length > 0
+        ? categories.find(c => c.value === categoryFilter || c.id === categoryFilter)?.name
+        : categoryOptions?.find(c => c.value === categoryFilter)?.label) || ''
+    : '';
 
   if (storeLoading) {
     return (
