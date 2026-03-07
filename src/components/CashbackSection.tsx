@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { useCashbackSection } from '@/hooks/useCashbackSection';
 import { useStores } from '@/hooks/useData';
 import { useOffers } from '@/hooks/useData';
