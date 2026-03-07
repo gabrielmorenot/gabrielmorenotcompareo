@@ -98,7 +98,7 @@ export function StoresSection() {
                     </span>
                   )}
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
 
