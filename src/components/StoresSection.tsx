@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import { useStores } from '@/hooks/useData';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
 
