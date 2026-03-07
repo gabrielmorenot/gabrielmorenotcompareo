@@ -1,13 +1,12 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useStore, useStoreOffers, useSuggestedOffers } from '@/hooks/useStoreOffers';
 import { useCategories } from '@/hooks/useCategories';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { OfferCard } from '@/components/OfferCard';
-import { ArrowRight, ChevronLeft, ChevronDown, Loader2 } from 'lucide-react';
+import { ArrowRight, ChevronLeft, ChevronDown } from 'lucide-react';
 import { CATEGORIES } from '@/types';
-import { useMemo } from 'react';
 
 export default function StorePage() {
   const { id } = useParams<{ id: string }>();
@@ -15,16 +14,20 @@ export default function StorePage() {
   const { data: categories } = useCategories();
   const [categoryFilter, setCategoryFilter] = useState<string>('');
   const { data: offers, isLoading: offersLoading } = useStoreOffers(id || '', categoryFilter || null);
-  const { data: suggestedOffers, isLoading: suggestedLoading } = useSuggestedOffers(id || '', categoryFilter || null);
+  const { data: suggestedOffers } = useSuggestedOffers(id || '', categoryFilter || null);
 
-  // Split offers: first 10 (2 rows), rest goes after suggested section
   const firstRowOffers = useMemo(() => offers?.slice(0, 10) || [], [offers]);
   const remainingOffers = useMemo(() => offers?.slice(10) || [], [offers]);
 
+  const categoryOptions = useMemo(() => {
+    if (categories && categories.length > 0) {
+      return categories.map(c => ({ value: c.id, label: c.name }));
+    }
+    return CATEGORIES.map(c => ({ value: c.value, label: c.label }));
+  }, [categories]);
+
   const selectedLabel = categoryFilter
-    ? (categories && categories.length > 0
-        ? categories.find(c => c.value === categoryFilter || c.id === categoryFilter)?.name
-        : categoryOptions?.find(c => c.value === categoryFilter)?.label) || ''
+    ? categoryOptions.find(c => c.value === categoryFilter)?.label || ''
     : '';
 
   if (storeLoading) {
@@ -50,15 +53,6 @@ export default function StorePage() {
     );
   }
 
-  // Build category options from dynamic categories + fallback enum
-  const categoryOptions = categories && categories.length > 0
-    ? categories.map(c => ({ value: c.id, label: c.name }))
-    : CATEGORIES.map(c => ({ value: c.value, label: c.label }));
-
-  const selectedLabel = categoryFilter
-    ? categoryOptions.find(c => c.value === categoryFilter)?.label || ''
-    : '';
-
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -72,7 +66,6 @@ export default function StorePage() {
 
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div className="flex items-center gap-5">
-              {/* Logo */}
               <div className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] rounded-full bg-white/10 border border-white/20 flex items-center justify-center overflow-hidden flex-shrink-0">
                 {store.logo_url ? (
                   <img src={store.logo_url} alt={store.name} className="w-full h-full object-cover" />
@@ -125,7 +118,7 @@ export default function StorePage() {
         </div>
       </section>
 
-      {/* Offers Grid */}
+      {/* 1. First 2 rows of category results */}
       <section className="py-8 md:py-12">
         <div className="container">
           <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6">
@@ -136,13 +129,13 @@ export default function StorePage() {
 
           {offersLoading ? (
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {Array.from({ length: 8 }).map((_, i) => (
+              {Array.from({ length: 10 }).map((_, i) => (
                 <div key={i} className="aspect-square bg-muted animate-pulse rounded-xl" />
               ))}
             </div>
-          ) : offers && offers.length > 0 ? (
+          ) : firstRowOffers.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {offers.map(offer => (
+              {firstRowOffers.map(offer => (
                 <OfferCard key={offer.id} offer={offer} />
               ))}
             </div>
@@ -157,6 +150,42 @@ export default function StorePage() {
           )}
         </div>
       </section>
+
+      {/* 2. Suggested offers from other stores */}
+      {suggestedOffers && suggestedOffers.length > 0 && (
+        <section className="py-8 md:py-12 bg-muted/30">
+          <div className="container">
+            <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6">
+              {categoryFilter && selectedLabel
+                ? `Achamos esses resultados de ${selectedLabel} aqui também`
+                : 'Sugestões de ofertas imperdíveis que já acabam'}
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {suggestedOffers.map(offer => (
+                <OfferCard key={offer.id} offer={offer} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 3. Remaining offers from selected category */}
+      {remainingOffers.length > 0 && (
+        <section className="py-8 md:py-12">
+          <div className="container">
+            <h2 className="text-xl md:text-2xl font-bold text-foreground mb-6">
+              {selectedLabel
+                ? `Mais ofertas em ${selectedLabel}`
+                : `Mais ofertas de ${store.name}`}
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {remainingOffers.map(offer => (
+                <OfferCard key={offer.id} offer={offer} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       <Footer />
     </div>
